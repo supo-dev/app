@@ -14,6 +14,7 @@ declare(strict_types=1);
 */
 
 use Illuminate\Support\Sleep;
+use Illuminate\Support\Str;
 
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
@@ -25,7 +26,7 @@ pest()->extend(Tests\TestCase::class)
 
         $this->freezeTime();
     })
-    ->in('Browser', 'Feature', 'Unit');
+    ->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------
