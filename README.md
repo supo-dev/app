@@ -2,6 +2,17 @@
 
 ## API Features:
 
+### Post Management
+
+- [GET] **/posts/{post_id} - Get Post by ID** DONE
+- [POST] **/posts - Create New Post** DONE
+- [DELETE] **/posts/{post_id} - Delete Post by ID** DONE
+
+### Follow Management
+
+- [POST] **/follows/{user_id} - Follow a User** DONE
+- [DELETE] **/follows/{user_id} - Unfollow a User** DONE
+
 ### Registration (end)
 - [POST] **/users - Register New User**
 - [DELETE] **/users - Delete User Account**
@@ -20,18 +31,7 @@
 
 - [GET] **/feeds/{feed_type} - Get Feed (feed_type can be 'home' or 'explore')**
 
-### Post Management
-
-- [GET] **/posts/{post_id} - Get Post by ID** DONE 
-- [POST] **/posts - Create New Post** DONE
-- [DELETE] **/posts/{post_id} - Delete Post by ID** DONE
-
 ### Like Management
 
 - [POST] **/likes/{post_id} - Like a Post**
 - [DELETE] **/likes/{post_id} - Unlike a Post**
-
-### Follow Management
-
-- [POST] **/follows/{user_id} - Follow a User**
-- [DELETE] **/follows/{user_id} - Unfollow a User**

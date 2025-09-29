@@ -26,3 +26,27 @@ test('relation posts', function () {
         ->toHaveCount(3)
         ->each->toBeInstanceOf(Post::class);
 });
+
+test('relation following', function () {
+    $userA = User::factory()->create()->fresh();
+    $userB = User::factory()->create()->fresh();
+
+    $userA->following()->attach($userB);
+
+    expect($userA->following)
+        ->toHaveCount(1)
+        ->each->toBeInstanceOf(User::class)
+        ->and($userA->following->first()->id)->toBe($userB->id);
+});
+
+test('relation followers', function () {
+    $userA = User::factory()->create()->fresh();
+    $userB = User::factory()->create()->fresh();
+
+    $userB->following()->attach($userA);
+
+    expect($userA->followers)
+        ->toHaveCount(1)
+        ->each->toBeInstanceOf(User::class)
+        ->and($userA->followers->first()->id)->toBe($userB->id);
+});
