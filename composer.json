@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.4.0",
         "laravel/framework": "^12.31.1",
+        "laravel/sanctum": "^4.2",
         "nunomaduro/essentials": "^1.0.1"
     },
     "require-dev": {

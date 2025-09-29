@@ -10,9 +10,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @property-read int $id
+ * @property-read string $nickname
  * @property-read string $name
  * @property-read string $email
  * @property-read CarbonInterface|null $email_verified_at
@@ -23,6 +25,8 @@ use Illuminate\Notifications\Notifiable;
  */
 final class User extends Authenticatable implements MustVerifyEmail
 {
+    use HasApiTokens;
+
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
