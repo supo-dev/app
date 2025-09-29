@@ -12,11 +12,6 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Response;
 
-/**
- * - [GET] /posts/{post_id} - Get Post by ID
- * - [POST] /posts - Create New Post
- * - [DELETE] /posts/{post_id} - Delete Post by ID
- */
 final readonly class PostController
 {
     public function show(Post $post): Response

@@ -5,7 +5,11 @@ declare(strict_types=1);
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
+// Users...
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
 Route::middleware(['auth', 'verified'])->group(function (): void {
 
