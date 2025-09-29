@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Models\Post;
 use App\Models\User;
 
 test('to array', function () {
-    $user = User::factory()->create()->refresh();
+    $user = User::factory()->create()->fresh();
 
     expect(array_keys($user->toArray()))
         ->toBe([
@@ -16,4 +17,12 @@ test('to array', function () {
             'created_at',
             'updated_at',
         ]);
+});
+
+test('relation posts', function () {
+    $user = User::factory()->hasPosts(3)->create()->fresh();
+
+    expect($user->posts)
+        ->toHaveCount(3)
+        ->each->toBeInstanceOf(Post::class);
 });

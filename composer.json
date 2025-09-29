@@ -62,19 +62,16 @@
             "@php artisan migrate --graceful --ansi"
         ],
         "update:requirements": [
-            "composer bump",
-            "npx npm-check-updates -u"
+            "composer bump"
         ],
         "lint": [
             "rector",
-            "pint --parallel",
-            "npm run lint"
+            "pint --parallel"
         ],
         "test:type-coverage": "pest --type-coverage --min=100",
         "test:lint": [
             "pint --parallel --test",
-            "rector --dry-run",
-            "npm run test:lint"
+            "rector --dry-run"
         ],
         "test:unit": "pest --parallel --coverage --exactly=100.0",
         "test:types": "phpstan",

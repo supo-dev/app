@@ -2,11 +2,11 @@
 
 ## API Features:
 
-### Registration
+### Registration (end)
 - [POST] **/users - Register New User**
 - [DELETE] **/users - Delete User Account**
 
-### Login & Session Management
+### Login & Session Management (end)
 - [GET] **/sessions - Check Current Session**
 - [POST] **/sessions - Login**
 - [DELETE] **/sessions - Logout**
