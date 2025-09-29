@@ -17,9 +17,18 @@ final class RegisterController
     public function store(RegistrationRequest $request, CreateUserAction $createUserAction): JsonResponse
     {
 
-        $user = $createUserAction->handle($request->toDto());
+        $user = $createUserAction->handle(
+            nickname: $request->string('nickname')->toString(),
+            name: $request->string('name')->toString(),
+            email: $request->string('email')->toString(),
+            password: $request->string('password')->toString(),
+        );
 
-        return response()->json($user, 201);
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'token' => $token,
+        ], 201);
 
     }
 }

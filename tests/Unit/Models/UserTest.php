@@ -4,26 +4,22 @@ declare(strict_types=1);
 
 use App\Models\User;
 
-describe('user model', function (): void {
+test('to array', function (): void {
 
-    test('to array', function (): void {
+    /** @var User $user */
+    $user = User::factory()
+        ->createQuietly()
+        ->fresh();
 
-        /** @var User $user */
-        $user = User::factory()
-            ->createQuietly()
-            ->fresh();
-
-        expect(array_keys($user->toArray()))
-            ->toBe([
-                'id',
-                'created_at',
-                'updated_at',
-                'nickname',
-                'name',
-                'email',
-                'email_verified_at',
-            ]);
-
-    });
+    expect(array_keys($user->toArray()))
+        ->toBe([
+            'id',
+            'created_at',
+            'updated_at',
+            'nickname',
+            'name',
+            'email',
+            'email_verified_at',
+        ]);
 
 });

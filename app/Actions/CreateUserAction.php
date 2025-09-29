@@ -4,23 +4,25 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\DataObjects\CreateUserData;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Throwable;
+use Illuminate\Support\Facades\Hash;
 
-final class CreateUserAction
+final readonly class CreateUserAction
 {
-    /**
-     * @throws Throwable
-     */
-    public function handle(CreateUserData $createUserData): User
-    {
+    public function handle(
+        string $nickname,
+        string $name,
+        string $email,
+        string $password,
+    ): User {
 
-        return DB::transaction(function () use ($createUserData): User {
-            return User::query()
-                ->create($createUserData->toArray());
-        });
+        return User::query()
+            ->create([
+                'nickname' => $nickname,
+                'name' => $name,
+                'email' => $email,
+                'password' => Hash::make($password),
+            ]);
 
     }
 }
