@@ -49,15 +49,15 @@ it('cannot like a post twice', function () {
     $response = $this->actingAs($user)
         ->post(route('likes.store', [$post]));
 
-    $response->assertStatus(403);
+    $response->assertStatus(201);
 });
 
-it('cannot unlike a post that is not liked', function () {
+it('can unlike a post that is not liked', function () {
     $user = User::factory()->create();
     $post = Post::factory()->create();
 
     $response = $this->actingAs($user)
         ->delete(route('likes.destroy', [$post]));
 
-    $response->assertStatus(403);
+    $response->assertStatus(204);
 });

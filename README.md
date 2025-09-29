@@ -13,6 +13,11 @@
 - [POST] **/follows/{user_id} - Follow a User** DONE
 - [DELETE] **/follows/{user_id} - Unfollow a User** DONE
 
+### Like Management
+
+- [POST] **/likes/{post_id} - Like a Post** DONE
+- [DELETE] **/likes/{post_id} - Unlike a Post** DONE
+
 ### Registration (end)
 - [POST] **/users - Register New User**
 - [DELETE] **/users - Delete User Account**
@@ -30,8 +35,3 @@
 ### Feed Management
 
 - [GET] **/feeds/{feed_type} - Get Feed (feed_type can be 'home' or 'explore')**
-
-### Like Management
-
-- [POST] **/likes/{post_id} - Like a Post**
-- [DELETE] **/likes/{post_id} - Unlike a Post**

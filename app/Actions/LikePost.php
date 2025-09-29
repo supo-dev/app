@@ -12,7 +12,7 @@ final readonly class LikePost
 {
     public function handle(User $user, Post $post): Like
     {
-        return $user->likes()->create([
+        return $user->likes()->createOrFirst([
             'post_id' => $post->id,
         ]);
     }

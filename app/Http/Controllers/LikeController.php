@@ -12,10 +12,6 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Response;
 
-/**
- * - [POST] /likes/{post_id} - Like a Post
- * - [DELETE] /likes/{post_id} - Unlike a Post
- */
 final readonly class LikeController
 {
     public function store(LikePostRequest $request, Post $post, LikePost $action): Response
@@ -26,7 +22,7 @@ final readonly class LikeController
 
         $action->handle($user, $post);
 
-        return response('', 201);
+        return response(status: 201);
     }
 
     public function destroy(UnlikePostRequest $request, Post $post, UnlikePost $action): Response
@@ -37,6 +33,6 @@ final readonly class LikeController
 
         $action->handle($user, $post);
 
-        return response('', 204);
+        return response(status: 204);
     }
 }
