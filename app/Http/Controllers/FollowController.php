@@ -16,6 +16,8 @@ final class FollowController
     {
         $loggedInUser = $request->user();
 
+        assert($loggedInUser instanceof User);
+
         $action->handle($loggedInUser, $user);
 
         return response(status: 201);
@@ -24,6 +26,8 @@ final class FollowController
     public function destroy(Request $request, User $user, UnfollowUser $action): Response
     {
         $loggedInUser = $request->user();
+
+        assert($loggedInUser instanceof User);
 
         $action->handle($loggedInUser, $user);
 

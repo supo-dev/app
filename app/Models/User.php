@@ -56,6 +56,14 @@ final class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * @return HasMany<Like, $this>
+     */
+    public function likes(): HasMany
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    /**
      * @return BelongsToMany<User, $this>
      */
     public function followers(): BelongsToMany

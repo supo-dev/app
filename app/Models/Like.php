@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Database\Factories\PostFactory;
+use Database\Factories\LikeFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property-read int $id
  * @property-read int $user_id
- * @property-read string $content
+ * @property-read int $post_id
  */
-final class Post extends Model
+final class Like extends Model
 {
-    /** @use HasFactory<PostFactory> */
+    /** @use HasFactory<LikeFactory> */
     use HasFactory;
 
     /**
@@ -29,10 +28,10 @@ final class Post extends Model
     }
 
     /**
-     * @return HasMany<Like, $this>
+     * @return BelongsTo<Post, $this>
      */
-    public function likes(): HasMany
+    public function post(): BelongsTo
     {
-        return $this->hasMany(Like::class);
+        return $this->belongsTo(Post::class);
     }
 }

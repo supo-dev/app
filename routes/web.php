@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,8 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     // Follows...
     Route::post('/follows/{user}', [FollowController::class, 'store'])->name('follows.store');
     Route::delete('/follows/{user}', [FollowController::class, 'destroy'])->name('follows.destroy');
+
+    // Likes...
+    Route::post('/likes/{post}', [LikeController::class, 'store'])->name('likes.store');
+    Route::delete('/likes/{post}', [LikeController::class, 'destroy'])->name('likes.destroy');
 });
