@@ -22,9 +22,9 @@
 
 ### Post Management
 
-- [GET] **/posts/{post_id} - Get Post by ID**
-- [POST] **/posts - Create New Post**
-- [DELETE] **/posts/{post_id} - Delete Post by ID**
+- [GET] **/posts/{post_id} - Get Post by ID** DONE 
+- [POST] **/posts - Create New Post** DONE
+- [DELETE] **/posts/{post_id} - Delete Post by ID** DONE
 
 ### Like Management
 
