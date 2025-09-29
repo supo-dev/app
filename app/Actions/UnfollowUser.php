@@ -10,10 +10,8 @@ final readonly class UnfollowUser
 {
     public function handle(User $user, User $toUnfollow): void
     {
-        if ($user->following()->where('user_id', $toUnfollow->id)->doesntExist()) {
-            return;
-        }
-
-        $user->following()->detach($toUnfollow->id);
+        $user->following()->where('user_id', $toUnfollow->id)->doesntExistOr(
+            fn () => $user->following()->detach($toUnfollow->id)
+        );
     }
 }
