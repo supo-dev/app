@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\CreateUser;
+use App\Actions\UpdateUser;
 use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\UpdateUserRequest;
+use App\Models\User;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -33,5 +37,20 @@ final readonly class UserController
         $action->handle($name, $email, $password);
 
         return response(status: 201);
+    }
+
+    public function update(UpdateUserRequest $request, User $user, UpdateUser $action): JsonResponse
+    {
+        $name = $request->has('name') ? $request->string('name')->toString() : null;
+        $email = $request->has('email') ? $request->string('email')->toString() : null;
+
+        $updatedUser = $action->handle($user, $name, $email);
+
+        return response()->json([
+            'id' => $updatedUser->id,
+            'name' => $updatedUser->name,
+            'email' => $updatedUser->email,
+            'created_at' => $updatedUser->created_at->toISOString(),
+        ]);
     }
 }

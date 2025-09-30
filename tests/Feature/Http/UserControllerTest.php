@@ -81,3 +81,103 @@ it('can show a user profile', function () {
         'following_count' => 0,
     ]);
 });
+
+it('can update user profile', function () {
+    $user = User::factory()->create([
+        'name' => 'John Doe',
+        'email' => 'john@example.com',
+    ]);
+
+    $response = $this->actingAs($user)->putJson(route('users.update', $user), [
+        'name' => 'Jane Doe',
+        'email' => 'jane@example.com',
+    ]);
+
+    $response->assertOk();
+    $response->assertJson([
+        'id' => $user->id,
+        'name' => 'Jane Doe',
+        'email' => 'jane@example.com',
+    ]);
+
+    $user->refresh();
+    expect($user->name)->toBe('Jane Doe')
+        ->and($user->email)->toBe('jane@example.com');
+});
+
+it('can partially update user profile', function () {
+    $user = User::factory()->create([
+        'name' => 'John Doe',
+        'email' => 'john@example.com',
+    ]);
+
+    $response = $this->actingAs($user)->putJson(route('users.update', $user), [
+        'name' => 'Jane Doe',
+    ]);
+
+    $response->assertOk();
+    $response->assertJson([
+        'id' => $user->id,
+        'name' => 'Jane Doe',
+        'email' => 'john@example.com',
+    ]);
+
+    $user->refresh();
+    expect($user->name)->toBe('Jane Doe')
+        ->and($user->email)->toBe('john@example.com');
+});
+
+it('validates email uniqueness when updating user profile', function () {
+    $existingUser = User::factory()->create(['email' => 'existing@example.com']);
+    $user = User::factory()->create(['email' => 'john@example.com']);
+
+    $response = $this->actingAs($user)->putJson(route('users.update', $user), [
+        'email' => 'existing@example.com',
+    ]);
+
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors(['email']);
+});
+
+it('allows keeping same email when updating user profile', function () {
+    $user = User::factory()->create(['email' => 'john@example.com']);
+
+    $response = $this->actingAs($user)->putJson(route('users.update', $user), [
+        'name' => 'Jane Doe',
+        'email' => 'john@example.com',
+    ]);
+
+    $response->assertOk();
+});
+
+it('requires authentication to show user profile', function () {
+    $user = User::factory()->create();
+
+    $response = $this->getJson(route('users.show', $user));
+
+    $response->assertStatus(401);
+});
+
+it('requires authentication to update user profile', function () {
+    $user = User::factory()->create();
+
+    $response = $this->putJson(route('users.update', $user), [
+        'name' => 'Jane Doe',
+    ]);
+
+    $response->assertStatus(401);
+});
+
+it('cannot update another users profile', function () {
+    $user = User::factory()->create(['name' => 'John Doe']);
+    $otherUser = User::factory()->create(['name' => 'Other User']);
+
+    $response = $this->actingAs($user)->putJson(route('users.update', $otherUser), [
+        'name' => 'Hacked Name',
+    ]);
+
+    $response->assertStatus(403);
+
+    $otherUser->refresh();
+    expect($otherUser->name)->toBe('Other User');
+});

@@ -30,7 +30,7 @@
 ### Profile Management
 
 - [GET] **/users/{user_id} - Get User Profile by Username** DONE
-- [PUT] **/users/{user_id} - Update User Profile**
+- [PUT] **/users/{user_id} - Update User Profile** DONE
 
 ### Feed Management
 
