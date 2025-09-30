@@ -5,22 +5,16 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\LoginUser;
-use App\Actions\LogoutUser;
 use App\Http\Requests\LoginRequest;
+use App\Models\User;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 final readonly class SessionController
 {
-    public function show(Request $request): JsonResponse
+    public function show(#[CurrentUser] User $user): JsonResponse
     {
-        $user = $request->user();
-
-        if ($user === null) {
-            return response()->json(['authenticated' => false], 401);
-        }
-
         return response()->json([
             'authenticated' => true,
             'user' => [
@@ -36,20 +30,21 @@ final readonly class SessionController
         $email = $request->string('email')->toString();
         $password = $request->string('password')->toString();
 
-        $user = $action->handle($email, $password);
+        $result = $action->handle($email, $password);
 
         return response()->json([
             'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
+                'id' => $result['user']->id,
+                'name' => $result['user']->name,
+                'email' => $result['user']->email,
             ],
+            'token' => $result['token'],
         ]);
     }
 
-    public function destroy(Request $request, LogoutUser $action): Response
+    public function destroy(#[CurrentUser] User $user): Response
     {
-        $action->handle();
+        $user->currentAccessToken()->delete();
 
         return response(status: 204);
     }

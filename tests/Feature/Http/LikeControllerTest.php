@@ -2,16 +2,19 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\LikeController;
 use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 
 it('may like a post', function () {
     $user = User::factory()->create();
     $post = Post::factory()->create();
 
-    $response = $this->actingAs($user)
-        ->post(route('likes.store', [$post]));
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->postJson(action([LikeController::class, 'store'], $post));
 
     $response->assertStatus(201);
 
@@ -28,8 +31,9 @@ it('may unlike a post', function () {
         'post_id' => $post->id,
     ]);
 
-    $response = $this->actingAs($user)
-        ->delete(route('likes.destroy', [$post]));
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->deleteJson(action([LikeController::class, 'destroy'], $post));
 
     $response->assertStatus(204);
 
@@ -46,8 +50,9 @@ it('cannot like a post twice', function () {
         'post_id' => $post->id,
     ]);
 
-    $response = $this->actingAs($user)
-        ->post(route('likes.store', [$post]));
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->postJson(action([LikeController::class, 'store'], $post));
 
     $response->assertStatus(201);
 });
@@ -56,8 +61,9 @@ it('can unlike a post that is not liked', function () {
     $user = User::factory()->create();
     $post = Post::factory()->create();
 
-    $response = $this->actingAs($user)
-        ->delete(route('likes.destroy', [$post]));
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->deleteJson(action([LikeController::class, 'destroy'], $post));
 
     $response->assertStatus(204);
 });

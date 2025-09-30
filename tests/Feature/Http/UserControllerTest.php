@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\UserController;
 use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 
 it('can create a user', function () {
-    $response = $this->post(route('users.store'), [
+    $response = $this->postJson(action([UserController::class, 'store']), [
         'name' => 'John Doe',
         'email' => 'john@example.com',
         'password' => 'password123',
@@ -22,14 +24,14 @@ it('can create a user', function () {
 });
 
 it('validates required fields when creating a user', function () {
-    $response = $this->postJson(route('users.store'), []);
+    $response = $this->postJson(action([UserController::class, 'store']), []);
 
     $response->assertStatus(422);
     $response->assertJsonValidationErrors(['name', 'email', 'password']);
 });
 
 it('validates email format when creating a user', function () {
-    $response = $this->postJson(route('users.store'), [
+    $response = $this->postJson(action([UserController::class, 'store']), [
         'name' => 'John Doe',
         'email' => 'not-an-email',
         'password' => 'password123',
@@ -42,7 +44,7 @@ it('validates email format when creating a user', function () {
 it('validates unique email when creating a user', function () {
     $existingUser = User::factory()->create(['email' => 'existing@example.com']);
 
-    $response = $this->postJson(route('users.store'), [
+    $response = $this->postJson(action([UserController::class, 'store']), [
         'name' => 'John Doe',
         'email' => 'existing@example.com',
         'password' => 'password123',
@@ -53,7 +55,7 @@ it('validates unique email when creating a user', function () {
 });
 
 it('validates minimum password length when creating a user', function () {
-    $response = $this->postJson(route('users.store'), [
+    $response = $this->postJson(action([UserController::class, 'store']), [
         'name' => 'John Doe',
         'email' => 'john@example.com',
         'password' => 'short',
@@ -69,7 +71,9 @@ it('can show a user profile', function () {
         'email' => 'john@example.com',
     ]);
 
-    $response = $this->actingAs($user)->get(route('users.show', $user));
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->getJson(action([UserController::class, 'show'], $user));
 
     $response->assertOk();
     $response->assertJson([
@@ -88,7 +92,9 @@ it('can update user profile', function () {
         'email' => 'john@example.com',
     ]);
 
-    $response = $this->actingAs($user)->putJson(route('users.update', $user), [
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->putJson(action([UserController::class, 'update'], $user), [
         'name' => 'Jane Doe',
         'email' => 'jane@example.com',
     ]);
@@ -111,7 +117,9 @@ it('can partially update user profile', function () {
         'email' => 'john@example.com',
     ]);
 
-    $response = $this->actingAs($user)->putJson(route('users.update', $user), [
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->putJson(action([UserController::class, 'update'], $user), [
         'name' => 'Jane Doe',
     ]);
 
@@ -131,7 +139,9 @@ it('validates email uniqueness when updating user profile', function () {
     $existingUser = User::factory()->create(['email' => 'existing@example.com']);
     $user = User::factory()->create(['email' => 'john@example.com']);
 
-    $response = $this->actingAs($user)->putJson(route('users.update', $user), [
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->putJson(action([UserController::class, 'update'], $user), [
         'email' => 'existing@example.com',
     ]);
 
@@ -142,7 +152,9 @@ it('validates email uniqueness when updating user profile', function () {
 it('allows keeping same email when updating user profile', function () {
     $user = User::factory()->create(['email' => 'john@example.com']);
 
-    $response = $this->actingAs($user)->putJson(route('users.update', $user), [
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->putJson(action([UserController::class, 'update'], $user), [
         'name' => 'Jane Doe',
         'email' => 'john@example.com',
     ]);
@@ -153,7 +165,7 @@ it('allows keeping same email when updating user profile', function () {
 it('requires authentication to show user profile', function () {
     $user = User::factory()->create();
 
-    $response = $this->getJson(route('users.show', $user));
+    $response = $this->getJson(action([UserController::class, 'show'], $user));
 
     $response->assertStatus(401);
 });
@@ -161,7 +173,7 @@ it('requires authentication to show user profile', function () {
 it('requires authentication to update user profile', function () {
     $user = User::factory()->create();
 
-    $response = $this->putJson(route('users.update', $user), [
+    $response = $this->putJson(action([UserController::class, 'update'], $user), [
         'name' => 'Jane Doe',
     ]);
 
@@ -172,7 +184,9 @@ it('cannot update another users profile', function () {
     $user = User::factory()->create(['name' => 'John Doe']);
     $otherUser = User::factory()->create(['name' => 'Other User']);
 
-    $response = $this->actingAs($user)->putJson(route('users.update', $otherUser), [
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->putJson(action([UserController::class, 'update'], $otherUser), [
         'name' => 'Hacked Name',
     ]);
 
@@ -185,7 +199,9 @@ it('cannot update another users profile', function () {
 it('can delete own account', function () {
     $user = User::factory()->create();
 
-    $response = $this->actingAs($user)->deleteJson(route('users.destroy'));
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->deleteJson(action([UserController::class, 'destroy']));
 
     $response->assertStatus(204);
 
@@ -193,7 +209,7 @@ it('can delete own account', function () {
 });
 
 it('requires authentication to delete account', function () {
-    $response = $this->deleteJson(route('users.destroy'));
+    $response = $this->deleteJson(action([UserController::class, 'destroy']));
 
     $response->assertStatus(401);
 });

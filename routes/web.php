@@ -2,40 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\FollowController;
-use App\Http\Controllers\LikeController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\SessionController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-// Sessions...
-Route::get('/sessions', [SessionController::class, 'show'])->name('sessions.show');
-Route::post('/sessions', [SessionController::class, 'store'])->name('sessions.store');
-
-// Users...
-Route::post('/users', [UserController::class, 'store'])->name('users.store');
-
-Route::middleware(['auth', 'verified'])->group(function (): void {
-
-    // Sessions...
-    Route::delete('/sessions', [SessionController::class, 'destroy'])->name('sessions.destroy');
-
-    // Users...
-    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
-    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
-    Route::delete('/users', [UserController::class, 'destroy'])->name('users.destroy');
-
-    // Posts...
-    Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
-    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
-    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
-
-    // Follows...
-    Route::post('/follows/{user}', [FollowController::class, 'store'])->name('follows.store');
-    Route::delete('/follows/{user}', [FollowController::class, 'destroy'])->name('follows.destroy');
-
-    // Likes...
-    Route::post('/likes/{post}', [LikeController::class, 'store'])->name('likes.store');
-    Route::delete('/likes/{post}', [LikeController::class, 'destroy'])->name('likes.destroy');
-});
+Route::get('/', fn () => response()->json(['message' => 'Sup Dev API is running.'], 200));

@@ -2,14 +2,17 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\FollowController;
 use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 
 it('may follow a user', function (): void {
     $user = User::factory()->create();
     $targetUser = User::factory()->create();
 
-    $response = $this->actingAs($user)
-        ->post(route('follows.store', [$targetUser]));
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->postJson(action([FollowController::class, 'store'], $targetUser));
 
     $response->assertStatus(201);
 
@@ -22,8 +25,9 @@ it('may unfollow a user', function (): void {
     $targetUser = User::factory()->create();
     $user->following()->attach($targetUser->id);
 
-    $response = $this->actingAs($user)
-        ->delete(route('follows.destroy', [$targetUser]));
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->deleteJson(action([FollowController::class, 'destroy'], $targetUser));
 
     $response->assertStatus(204);
 

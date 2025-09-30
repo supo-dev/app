@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 final readonly class LoginUser
 {
-    public function handle(string $email, string $password): User
+    /**
+     * @return array{user: User, token: string}
+     */
+    public function handle(string $email, string $password): array
     {
         $user = User::query()->where('email', $email)->first();
 
@@ -19,8 +21,11 @@ final readonly class LoginUser
             'email' => ['The provided credentials are incorrect.'],
         ]));
 
-        Auth::login($user);
+        $token = $user->createToken('api-token')->plainTextToken;
 
-        return $user;
+        return [
+            'user' => $user,
+            'token' => $token,
+        ];
     }
 }

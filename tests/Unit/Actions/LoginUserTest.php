@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Actions\LoginUser;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 it('may login a user with correct credentials', function (): void {
@@ -14,11 +13,12 @@ it('may login a user with correct credentials', function (): void {
     ]);
     $action = app(LoginUser::class);
 
-    $loggedInUser = $action->handle('john@example.com', 'password123');
+    $result = $action->handle('john@example.com', 'password123');
 
-    expect($loggedInUser->id)->toBe($user->id)
-        ->and(Auth::check())->toBeTrue()
-        ->and(Auth::id())->toBe($user->id);
+    expect($result)->toBeArray()
+        ->and($result['user']->id)->toBe($user->id)
+        ->and($result['token'])->toBeString()
+        ->and(mb_strlen($result['token']))->toBeGreaterThan(0);
 });
 
 it('throws exception for invalid email', function (): void {
