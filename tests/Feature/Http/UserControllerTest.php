@@ -8,6 +8,7 @@ it('can create a user', function () {
     $response = $this->post(route('users.store'), [
         'name' => 'John Doe',
         'email' => 'john@example.com',
+        'username' => 'johndoe',
         'password' => 'password123',
     ]);
 

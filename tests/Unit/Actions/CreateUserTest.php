@@ -8,10 +8,11 @@ use App\Models\User;
 it('may create a user', function (): void {
     $name = 'John Doe';
     $email = 'john@example.com';
+    $username = 'johndoe';
     $password = 'password123';
     $action = app(CreateUser::class);
 
-    $user = $action->handle($name, $email, $password);
+    $user = $action->handle($name, $email, $username, $password);
 
     expect($user)->toBeInstanceOf(User::class)
         ->and($user->name)->toBe($name)
