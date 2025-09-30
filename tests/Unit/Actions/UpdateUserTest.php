@@ -49,6 +49,7 @@ it('does not update when no data provided', function (): void {
         'name' => 'Original Name',
         'email' => 'original@example.com',
     ]);
+
     $action = app(UpdateUser::class);
 
     $updatedUser = $action->handle($user);
