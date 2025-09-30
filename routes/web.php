@@ -5,13 +5,22 @@ declare(strict_types=1);
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
+// Sessions...
+Route::get('/sessions', [SessionController::class, 'show'])->name('sessions.show');
+Route::post('/sessions', [SessionController::class, 'store'])->name('sessions.store');
 
 // Users...
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
 Route::middleware(['auth', 'verified'])->group(function (): void {
+
+    // Sessions...
+    Route::delete('/sessions', [SessionController::class, 'destroy'])->name('sessions.destroy');
+
     // Users...
     Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');

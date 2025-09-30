@@ -23,9 +23,9 @@
 - [DELETE] **/users - Delete User Account** DONE
 
 ### Login & Session Management (end)
-- [GET] **/sessions - Check Current Session**
-- [POST] **/sessions - Login**
-- [DELETE] **/sessions - Logout**
+- [GET] **/sessions - Check Current Session** DONE
+- [POST] **/sessions - Login** DONE
+- [DELETE] **/sessions - Logout** DONE
 
 ### Profile Management
 
