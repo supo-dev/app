@@ -10,28 +10,21 @@ use App\Http\Requests\LikePostRequest;
 use App\Http\Requests\UnlikePostRequest;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\Response;
 
 final readonly class LikeController
 {
-    public function store(LikePostRequest $request, Post $post, LikePost $action): Response
+    public function store(LikePostRequest $request, Post $post, LikePost $action, #[CurrentUser] User $loggedInUser): Response
     {
-        $user = $request->user();
-
-        assert($user instanceof User);
-
-        $action->handle($user, $post);
+        $action->handle($loggedInUser, $post);
 
         return response(status: 201);
     }
 
-    public function destroy(UnlikePostRequest $request, Post $post, UnlikePost $action): Response
+    public function destroy(UnlikePostRequest $request, Post $post, UnlikePost $action, #[CurrentUser] User $loggedInUser): Response
     {
-        $user = $request->user();
-
-        assert($user instanceof User);
-
-        $action->handle($user, $post);
+        $action->handle($loggedInUser, $post);
 
         return response(status: 204);
     }
