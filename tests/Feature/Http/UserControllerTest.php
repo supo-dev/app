@@ -62,3 +62,22 @@ it('validates minimum password length when creating a user', function () {
     $response->assertStatus(422);
     $response->assertJsonValidationErrors(['password']);
 });
+
+it('can show a user profile', function () {
+    $user = User::factory()->create([
+        'name' => 'John Doe',
+        'email' => 'john@example.com',
+    ]);
+
+    $response = $this->actingAs($user)->get(route('users.show', $user));
+
+    $response->assertOk();
+    $response->assertJson([
+        'id' => $user->id,
+        'name' => 'John Doe',
+        'email' => 'john@example.com',
+        'posts_count' => 0,
+        'followers_count' => 0,
+        'following_count' => 0,
+    ]);
+});

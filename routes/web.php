@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
 Route::middleware(['auth', 'verified'])->group(function (): void {
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 
     // Posts...
     Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
