@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\CreateUser;
+use App\Actions\DeleteUser;
 use App\Actions\UpdateUser;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -52,5 +53,12 @@ final readonly class UserController
             'email' => $updatedUser->email,
             'created_at' => $updatedUser->created_at->toISOString(),
         ]);
+    }
+
+    public function destroy(#[CurrentUser] User $user, DeleteUser $action): Response
+    {
+        $action->handle($user);
+
+        return response(status: 204);
     }
 }

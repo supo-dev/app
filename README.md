@@ -19,8 +19,8 @@
 - [DELETE] **/likes/{post_id} - Unlike a Post** DONE
 
 ### Registration (end)
-- [POST] **/users - Register New User**
-- [DELETE] **/users - Delete User Account**
+- [POST] **/users - Register New User** DONE
+- [DELETE] **/users - Delete User Account** DONE
 
 ### Login & Session Management (end)
 - [GET] **/sessions - Check Current Session**

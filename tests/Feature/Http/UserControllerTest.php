@@ -181,3 +181,19 @@ it('cannot update another users profile', function () {
     $otherUser->refresh();
     expect($otherUser->name)->toBe('Other User');
 });
+
+it('can delete own account', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->deleteJson(route('users.destroy'));
+
+    $response->assertStatus(204);
+
+    expect(User::find($user->id))->toBeNull();
+});
+
+it('requires authentication to delete account', function () {
+    $response = $this->deleteJson(route('users.destroy'));
+
+    $response->assertStatus(401);
+});

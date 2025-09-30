@@ -15,6 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     // Users...
     Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users', [UserController::class, 'destroy'])->name('users.destroy');
 
     // Posts...
     Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
