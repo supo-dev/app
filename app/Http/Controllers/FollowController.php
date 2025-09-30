@@ -7,28 +7,20 @@ namespace App\Http\Controllers;
 use App\Actions\FollowUser;
 use App\Actions\UnfollowUser;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\Response;
 
 final class FollowController
 {
-    public function store(Request $request, User $user, FollowUser $action): Response
+    public function store(#[CurrentUser] User $loggedInUser, User $user, FollowUser $action): Response
     {
-        $loggedInUser = $request->user();
-
-        assert($loggedInUser instanceof User);
-
         $action->handle($loggedInUser, $user);
 
         return response(status: 201);
     }
 
-    public function destroy(Request $request, User $user, UnfollowUser $action): Response
+    public function destroy(#[CurrentUser] User $loggedInUser, User $user, UnfollowUser $action): Response
     {
-        $loggedInUser = $request->user();
-
-        assert($loggedInUser instanceof User);
-
         $action->handle($loggedInUser, $user);
 
         return response(status: 204);

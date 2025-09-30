@@ -10,6 +10,7 @@ use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\DeletePostRequest;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\Response;
 
 final readonly class PostController
@@ -19,15 +20,11 @@ final readonly class PostController
         return response($post->toArray(), 200);
     }
 
-    public function store(CreatePostRequest $request, CreatePost $action): Response
+    public function store(CreatePostRequest $request, CreatePost $action, #[CurrentUser] User $loggedInUser): Response
     {
         $content = $request->string('content')->toString();
 
-        $user = $request->user();
-
-        assert($user instanceof User);
-
-        $action->handle($user, $content);
+        $action->handle($loggedInUser, $content);
 
         return response(status: 201);
     }
