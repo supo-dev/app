@@ -20,10 +20,6 @@ final readonly class UpdateUser
             $data['email'] = $email;
         }
 
-        if ($data === []) {
-            return $user;
-        }
-
         return tap($user)->update($data);
     }
 }
