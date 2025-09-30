@@ -14,6 +14,6 @@ final class DeletePostRequest extends FormRequest
 {
     public function authorize(#[CurrentUser] User $user, #[RouteParameter('post')] Post $post): bool
     {
-        return $user->id === $post->user_id;
+        return $post->user()->is($user);
     }
 }
