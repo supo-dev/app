@@ -16,6 +16,7 @@ it('can create a user', function () {
     $response = $this->postJson(action([UserController::class, 'store']), [
         'name' => 'John Doe',
         'email' => 'john@example.com',
+        'username' => 'johndoe',
         'password' => 'password123',
     ]);
 
@@ -61,6 +62,20 @@ it('validates unique email when creating a user', function () {
 
     $response->assertStatus(422);
     $response->assertJsonValidationErrors(['email']);
+});
+
+it('validates unique username when creating a user', function () {
+    $existingUser = User::factory()->create(['username' => 'existinguser']);
+
+    $response = $this->postJson(route('users.store'), [
+        'name' => 'John Doe',
+        'email' => 'john@example.com',
+        'username' => 'existinguser',
+        'password' => 'password123',
+    ]);
+
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors(['username']);
 });
 
 it('validates minimum password length when creating a user', function () {

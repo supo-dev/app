@@ -34,9 +34,10 @@ final readonly class UserController
     {
         $name = $request->string('name')->toString();
         $email = $request->string('email')->toString();
+        $username = $request->string('username')->toString();
         $password = $request->string('password')->toString();
 
-        $action->handle($name, $email, $password);
+        $action->handle($name, $email, $username, $password);
 
         return response(status: 201);
     }

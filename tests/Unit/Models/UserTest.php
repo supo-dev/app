@@ -13,6 +13,7 @@ test('to array', function () {
             'id',
             'name',
             'email',
+            'username',
             'email_verified_at',
             'created_at',
             'updated_at',
