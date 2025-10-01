@@ -15,8 +15,8 @@ final readonly class LikeController
 {
     public function store(
         Post $post,
-        LikePost $action,
-        #[CurrentUser] User $loggedInUser
+        #[CurrentUser] User $loggedInUser,
+        LikePost $action
     ): Response {
         $action->handle($loggedInUser, $post);
 
@@ -25,8 +25,8 @@ final readonly class LikeController
 
     public function destroy(
         Post $post,
-        UnlikePost $action,
-        #[CurrentUser] User $loggedInUser
+        #[CurrentUser] User $loggedInUser,
+        UnlikePost $action
     ): Response {
         $action->handle($loggedInUser, $post);
 

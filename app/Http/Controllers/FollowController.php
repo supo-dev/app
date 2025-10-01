@@ -13,8 +13,8 @@ use Illuminate\Http\Response;
 final class FollowController
 {
     public function store(
-        #[CurrentUser] User $loggedInUser,
         User $user,
+        #[CurrentUser] User $loggedInUser,
         FollowUser $action
     ): Response {
         $action->handle($loggedInUser, $user);
@@ -23,8 +23,8 @@ final class FollowController
     }
 
     public function destroy(
-        #[CurrentUser] User $loggedInUser,
         User $user,
+        #[CurrentUser] User $loggedInUser,
         UnfollowUser $action
     ): Response {
         $action->handle($loggedInUser, $user);
