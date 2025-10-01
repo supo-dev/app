@@ -6,15 +6,15 @@ namespace App\Http\Controllers;
 
 use App\Actions\SendEmailVerification;
 use App\Actions\VerifyEmail;
-use App\Http\Requests\VerifyEmailRequest;
+use App\Http\Requests\UpdateUserEmailVerificationRequest;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-final readonly class EmailVerificationController
+final readonly class UserEmailVerificationController
 {
-    public function send(
+    public function show(
         #[CurrentUser] User $user,
         SendEmailVerification $action
     ): Response {
@@ -23,8 +23,8 @@ final readonly class EmailVerificationController
         return response(status: 200);
     }
 
-    public function verify(
-        VerifyEmailRequest $request,
+    public function update(
+        UpdateUserEmailVerificationRequest $request,
         #[CurrentUser] User $user,
         VerifyEmail $action
     ): JsonResponse {

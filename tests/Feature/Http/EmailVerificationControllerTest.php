@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\UserEmailVerificationController;
 use App\Models\User;
 use App\Notifications\EmailVerificationNotification;
 use App\Support\EmailVerificationTokenManager;
@@ -18,7 +18,7 @@ it('can send email verification', function (): void {
 
     Sanctum::actingAs($user, ['*']);
 
-    $response = $this->postJson(action([EmailVerificationController::class, 'send']));
+    $response = $this->postJson(action([UserEmailVerificationController::class, 'show']));
 
     $response->assertStatus(200);
 
@@ -29,7 +29,7 @@ it('can send email verification', function (): void {
 });
 
 it('requires authentication to send verification', function (): void {
-    $response = $this->postJson(action([EmailVerificationController::class, 'send']));
+    $response = $this->postJson(action([UserEmailVerificationController::class, 'show']));
 
     $response->assertStatus(401);
 });
@@ -41,7 +41,7 @@ it('can verify email with valid token', function (): void {
 
     Sanctum::actingAs($user, ['*']);
 
-    $response = $this->postJson(action([EmailVerificationController::class, 'verify']), [
+    $response = $this->postJson(action([UserEmailVerificationController::class, 'update']), [
         'token' => $token,
     ]);
 
@@ -69,7 +69,7 @@ it('rejects invalid token for verification', function (): void {
 
     Sanctum::actingAs($user, ['*']);
 
-    $response = $this->postJson(action([EmailVerificationController::class, 'verify']), [
+    $response = $this->postJson(action([UserEmailVerificationController::class, 'update']), [
         'token' => 'INVALID1',
     ]);
 
@@ -83,7 +83,7 @@ it('rejects invalid token for verification', function (): void {
 });
 
 it('requires authentication to verify email', function (): void {
-    $response = $this->postJson(action([EmailVerificationController::class, 'verify']), [
+    $response = $this->postJson(action([UserEmailVerificationController::class, 'update']), [
         'token' => 'ABCD1234',
     ]);
 
@@ -95,7 +95,7 @@ it('validates token format when verifying', function (): void {
 
     Sanctum::actingAs($user, ['*']);
 
-    $response = $this->postJson(action([EmailVerificationController::class, 'verify']), [
+    $response = $this->postJson(action([UserEmailVerificationController::class, 'update']), [
         'token' => 'short',
     ]);
 

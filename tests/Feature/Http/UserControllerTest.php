@@ -39,6 +39,17 @@ it('validates required fields when creating a user', function () {
     $response->assertJsonValidationErrors(['username', 'email', 'password']);
 });
 
+it('validates username format when creating a user', function () {
+    $response = $this->postJson(action([UserController::class, 'store']), [
+        'username' => 'invalid Username-',
+        'email' => 'john@example.com',
+        'password' => 'password123',
+    ]);
+
+    $response->assertStatus(422)
+        ->assertJsonValidationErrors(['username']);
+});
+
 it('validates email format when creating a user', function () {
     $response = $this->postJson(action([UserController::class, 'store']), [
         'username' => 'doe',
@@ -199,6 +210,19 @@ it('allows keeping same email when updating user profile', function () {
     expect($user->email_verified_at)->not->toBeNull();
 
     Notification::assertNothingSent();
+});
+
+it('validates username format when updating user profile', function () {
+    $user = User::factory()->create();
+
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->putJson(action([UserController::class, 'update'], $user), [
+        'username' => 'Invalid Username-',
+    ]);
+
+    $response->assertStatus(422)
+        ->assertJsonValidationErrors(['username']);
 });
 
 it('requires authentication to show user profile', function () {

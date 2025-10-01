@@ -7,7 +7,7 @@ namespace App\Http\Requests;
 use App\Support\EmailVerificationTokenManager;
 use Illuminate\Foundation\Http\FormRequest;
 
-final class VerifyEmailRequest extends FormRequest
+final class UpdateUserEmailVerificationRequest extends FormRequest
 {
     /**
      * @return array<string, array<int, string>>

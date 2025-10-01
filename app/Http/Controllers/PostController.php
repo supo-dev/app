@@ -22,8 +22,8 @@ final readonly class PostController
 
     public function store(
         CreatePostRequest $request,
+        #[CurrentUser] User $loggedInUser,
         CreatePost $action,
-        #[CurrentUser] User $loggedInUser
     ): Response {
         $content = $request->string('content')->toString();
 

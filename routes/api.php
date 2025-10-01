@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserEmailVerificationController;
 use Illuminate\Support\Facades\Route;
 
 // Sessions...
@@ -41,6 +41,6 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
     Route::delete('/likes/{post}', [LikeController::class, 'destroy']);
 
     // Email Verification...
-    Route::post('/email/send-verification', [EmailVerificationController::class, 'send']);
-    Route::post('/email/verify', [EmailVerificationController::class, 'verify']);
+    Route::post('/email/send-verification', [UserEmailVerificationController::class, 'show']);
+    Route::post('/email/verify', [UserEmailVerificationController::class, 'update']);
 });
