@@ -6,8 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Actions\LikePost;
 use App\Actions\UnlikePost;
-use App\Http\Requests\LikePostRequest;
-use App\Http\Requests\UnlikePostRequest;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
@@ -16,7 +14,6 @@ use Illuminate\Http\Response;
 final readonly class LikeController
 {
     public function store(
-        LikePostRequest $request,
         Post $post,
         LikePost $action,
         #[CurrentUser] User $loggedInUser
@@ -27,7 +24,6 @@ final readonly class LikeController
     }
 
     public function destroy(
-        UnlikePostRequest $request,
         Post $post,
         UnlikePost $action,
         #[CurrentUser] User $loggedInUser
