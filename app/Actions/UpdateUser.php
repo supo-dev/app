@@ -28,7 +28,7 @@ final readonly class UpdateUser
             $data['email_verified_at'] = null;
         }
 
-        tap($user)->update($data);
+        $user->update($data);
 
         if ($user->wasChanged('email')) {
             $this->sendEmailVerification->handle($user);
