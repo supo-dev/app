@@ -72,6 +72,6 @@ it('may send notification with correct token', function (): void {
         return isset($notificationData['token']) &&
                mb_strlen($notificationData['token']) === 8 &&
                $tokenManager->verify($user, $notificationData['token'])
-               && str_contains($mailable->greeting, $user->name);
+               && str_contains($mailable->greeting, $user->username);
     });
 });

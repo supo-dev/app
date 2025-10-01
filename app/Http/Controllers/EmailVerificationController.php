@@ -36,7 +36,7 @@ final readonly class EmailVerificationController
             'message' => 'Email verified successfully.',
             'user' => [
                 'id' => $user->id,
-                'name' => $user->name,
+                'username' => $user->username,
                 'email' => $user->email,
                 'email_verified' => true,
             ],

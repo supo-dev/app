@@ -13,11 +13,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int $id
- * @property int $user_id
- * @property string $content
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property-read int $id
+ * @property-read int $user_id
+ * @property-read string $content
+ * @property-read Carbon $created_at
+ * @property-read Carbon $updated_at
  * @property-read User $user
  * @property-read Collection<int, Like> $likes
  */

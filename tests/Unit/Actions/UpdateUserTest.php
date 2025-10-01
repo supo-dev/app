@@ -13,20 +13,20 @@ beforeEach(function (): void {
 
 it('may update user name', function (): void {
     $user = User::factory()->create([
-        'name' => 'Original Name',
+        'username' => 'username',
         'email' => 'original@example.com',
     ]);
     $action = app(UpdateUser::class);
 
-    $updatedUser = $action->handle($user, 'New Name');
+    $updatedUser = $action->handle($user, 'new-username');
 
-    expect($updatedUser->name)->toBe('New Name')
+    expect($updatedUser->username)->toBe('new-username')
         ->and($updatedUser->email)->toBe('original@example.com');
 });
 
 it('may update user email', function (): void {
     $user = User::factory()->create([
-        'name' => 'Original Name',
+        'username' => 'original',
         'email' => 'original@example.com',
         'email_verified_at' => now(),
     ]);
@@ -34,7 +34,7 @@ it('may update user email', function (): void {
 
     $updatedUser = $action->handle($user, null, 'new@example.com');
 
-    expect($updatedUser->name)->toBe('Original Name')
+    expect($updatedUser->username)->toBe('original')
         ->and($updatedUser->email)->toBe('new@example.com')
         ->and($updatedUser->email_verified_at)->toBeNull();
 
@@ -43,15 +43,15 @@ it('may update user email', function (): void {
 
 it('may update both name and email', function (): void {
     $user = User::factory()->create([
-        'name' => 'Original Name',
+        'username' => 'username',
         'email' => 'original@example.com',
         'email_verified_at' => now(),
     ]);
     $action = app(UpdateUser::class);
 
-    $updatedUser = $action->handle($user, 'New Name', 'new@example.com');
+    $updatedUser = $action->handle($user, 'new-username', 'new@example.com');
 
-    expect($updatedUser->name)->toBe('New Name')
+    expect($updatedUser->username)->toBe('new-username')
         ->and($updatedUser->email)->toBe('new@example.com')
         ->and($updatedUser->email_verified_at)->toBeNull();
 
@@ -60,7 +60,7 @@ it('may update both name and email', function (): void {
 
 it('does not update when no data provided', function (): void {
     $user = User::factory()->create([
-        'name' => 'Original Name',
+        'username' => 'original',
         'email' => 'original@example.com',
     ]);
 
@@ -68,38 +68,38 @@ it('does not update when no data provided', function (): void {
 
     $updatedUser = $action->handle($user);
 
-    expect($updatedUser->name)->toBe('Original Name')
+    expect($updatedUser->username)->toBe('original')
         ->and($updatedUser->email)->toBe('original@example.com');
 });
 
 it('does not send email verification when email is not changed', function (): void {
     $user = User::factory()->create([
-        'name' => 'Original Name',
+        'username' => 'username',
         'email' => 'original@example.com',
         'email_verified_at' => now(),
     ]);
     $action = app(UpdateUser::class);
 
-    $updatedUser = $action->handle($user, 'New Name', 'original@example.com');
+    $updatedUser = $action->handle($user, 'new-username', 'original@example.com');
 
-    expect($updatedUser->name)->toBe('New Name')
+    expect($updatedUser->username)->toBe('new-username')
         ->and($updatedUser->email)->toBe('original@example.com')
         ->and($updatedUser->email_verified_at)->not->toBeNull();
 
     Notification::assertNothingSent();
 });
 
-it('does not send email verification when only name is updated', function (): void {
+it('does not send email verification when only username is updated', function (): void {
     $user = User::factory()->create([
-        'name' => 'Original Name',
+        'username' => 'username',
         'email' => 'original@example.com',
         'email_verified_at' => now(),
     ]);
     $action = app(UpdateUser::class);
 
-    $updatedUser = $action->handle($user, 'New Name');
+    $updatedUser = $action->handle($user, 'new-username');
 
-    expect($updatedUser->name)->toBe('New Name')
+    expect($updatedUser->username)->toBe('new-username')
         ->and($updatedUser->email)->toBe('original@example.com')
         ->and($updatedUser->email_verified_at)->not->toBeNull();
 

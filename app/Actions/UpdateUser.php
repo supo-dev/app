@@ -14,13 +14,13 @@ final readonly class UpdateUser
 
     public function handle(
         User $user,
-        ?string $name = null,
+        ?string $username = null,
         ?string $email = null
     ): User {
         $data = [];
 
-        if ($name !== null) {
-            $data['name'] = $name;
+        if ($username !== null) {
+            $data['username'] = $username;
         }
 
         if ($email !== null && $email !== $user->email) {

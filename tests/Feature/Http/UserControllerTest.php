@@ -14,9 +14,8 @@ beforeEach(function (): void {
 
 it('can create a user', function () {
     $response = $this->postJson(action([UserController::class, 'store']), [
-        'name' => 'John Doe',
+        'username' => 'doe',
         'email' => 'john@example.com',
-        'username' => 'johndoe',
         'password' => 'password123',
     ]);
 
@@ -26,7 +25,7 @@ it('can create a user', function () {
 
     expect($user)
         ->not->toBeNull()
-        ->and($user->name)->toBe('John Doe')
+        ->and($user->username)->toBe('doe')
         ->and($user->email)->toBe('john@example.com')
         ->and($user->email_verified_at)->toBeNull();
 
@@ -37,12 +36,12 @@ it('validates required fields when creating a user', function () {
     $response = $this->postJson(action([UserController::class, 'store']), []);
 
     $response->assertStatus(422);
-    $response->assertJsonValidationErrors(['name', 'email', 'password']);
+    $response->assertJsonValidationErrors(['username', 'email', 'password']);
 });
 
 it('validates email format when creating a user', function () {
     $response = $this->postJson(action([UserController::class, 'store']), [
-        'name' => 'John Doe',
+        'username' => 'doe',
         'email' => 'not-an-email',
         'password' => 'password123',
     ]);
@@ -55,7 +54,7 @@ it('validates unique email when creating a user', function () {
     $existingUser = User::factory()->create(['email' => 'existing@example.com']);
 
     $response = $this->postJson(action([UserController::class, 'store']), [
-        'name' => 'John Doe',
+        'username' => 'doe',
         'email' => 'existing@example.com',
         'password' => 'password123',
     ]);
@@ -65,10 +64,10 @@ it('validates unique email when creating a user', function () {
 });
 
 it('validates unique username when creating a user', function () {
-    $existingUser = User::factory()->create(['username' => 'existinguser']);
+    User::factory()->create(['username' => 'existinguser']);
 
-    $response = $this->postJson(route('users.store'), [
-        'name' => 'John Doe',
+    $response = $this->postJson(action([UserController::class, 'store']), [
+        'username' => 'doe',
         'email' => 'john@example.com',
         'username' => 'existinguser',
         'password' => 'password123',
@@ -80,7 +79,7 @@ it('validates unique username when creating a user', function () {
 
 it('validates minimum password length when creating a user', function () {
     $response = $this->postJson(action([UserController::class, 'store']), [
-        'name' => 'John Doe',
+        'username' => 'doe',
         'email' => 'john@example.com',
         'password' => 'short',
     ]);
@@ -91,7 +90,7 @@ it('validates minimum password length when creating a user', function () {
 
 it('can show a user profile', function () {
     $user = User::factory()->create([
-        'name' => 'John Doe',
+        'username' => 'doe',
         'email' => 'john@example.com',
     ]);
 
@@ -102,7 +101,7 @@ it('can show a user profile', function () {
     $response->assertOk();
     $response->assertJson([
         'id' => $user->id,
-        'name' => 'John Doe',
+        'username' => 'doe',
         'email' => 'john@example.com',
         'posts_count' => 0,
         'followers_count' => 0,
@@ -112,7 +111,7 @@ it('can show a user profile', function () {
 
 it('can update user profile', function () {
     $user = User::factory()->create([
-        'name' => 'John Doe',
+        'username' => 'doe',
         'email' => 'john@example.com',
         'email_verified_at' => now(),
     ]);
@@ -120,19 +119,19 @@ it('can update user profile', function () {
     Sanctum::actingAs($user, ['*']);
 
     $response = $this->putJson(action([UserController::class, 'update'], $user), [
-        'name' => 'Jane Doe',
+        'username' => 'doe',
         'email' => 'jane@example.com',
     ]);
 
     $response->assertOk();
     $response->assertJson([
         'id' => $user->id,
-        'name' => 'Jane Doe',
+        'username' => 'doe',
         'email' => 'jane@example.com',
     ]);
 
     $user->refresh();
-    expect($user->name)->toBe('Jane Doe')
+    expect($user->username)->toBe('doe')
         ->and($user->email)->toBe('jane@example.com')
         ->and($user->email_verified_at)->toBeNull();
 
@@ -141,7 +140,7 @@ it('can update user profile', function () {
 
 it('can partially update user profile', function () {
     $user = User::factory()->create([
-        'name' => 'John Doe',
+        'username' => 'doe',
         'email' => 'john@example.com',
         'email_verified_at' => now(),
     ]);
@@ -149,18 +148,18 @@ it('can partially update user profile', function () {
     Sanctum::actingAs($user, ['*']);
 
     $response = $this->putJson(action([UserController::class, 'update'], $user), [
-        'name' => 'Jane Doe',
+        'username' => 'doe',
     ]);
 
     $response->assertOk();
     $response->assertJson([
         'id' => $user->id,
-        'name' => 'Jane Doe',
+        'username' => 'doe',
         'email' => 'john@example.com',
     ]);
 
     $user->refresh();
-    expect($user->name)->toBe('Jane Doe')
+    expect($user->username)->toBe('doe')
         ->and($user->email)->toBe('john@example.com')
         ->and($user->email_verified_at)->not->toBeNull();
 
@@ -190,7 +189,7 @@ it('allows keeping same email when updating user profile', function () {
     Sanctum::actingAs($user, ['*']);
 
     $response = $this->putJson(action([UserController::class, 'update'], $user), [
-        'name' => 'Jane Doe',
+        'username' => 'doe',
         'email' => 'john@example.com',
     ]);
 
@@ -214,26 +213,26 @@ it('requires authentication to update user profile', function () {
     $user = User::factory()->create();
 
     $response = $this->putJson(action([UserController::class, 'update'], $user), [
-        'name' => 'Jane Doe',
+        'username' => 'doe',
     ]);
 
     $response->assertStatus(401);
 });
 
 it('cannot update another users profile', function () {
-    $user = User::factory()->create(['name' => 'John Doe']);
-    $otherUser = User::factory()->create(['name' => 'Other User']);
+    $user = User::factory()->create(['username' => 'doe']);
+    $otherUser = User::factory()->create(['username' => 'other']);
 
     Sanctum::actingAs($user, ['*']);
 
     $response = $this->putJson(action([UserController::class, 'update'], $otherUser), [
-        'name' => 'Hacked Name',
+        'username' => 'hacked',
     ]);
 
     $response->assertStatus(403);
 
     $otherUser->refresh();
-    expect($otherUser->name)->toBe('Other User');
+    expect($otherUser->username)->toBe('other');
 });
 
 it('can delete own account', function () {

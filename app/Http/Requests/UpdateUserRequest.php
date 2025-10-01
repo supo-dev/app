@@ -25,7 +25,7 @@ final class UpdateUserRequest extends FormRequest
         #[CurrentUser] User $user
     ): array {
         return [
-            'name' => ['sometimes', 'required', 'string', 'max:255'],
+            'username' => ['sometimes', 'required', 'string', 'max:255'],
             'email' => ['sometimes', 'required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
         ];
     }

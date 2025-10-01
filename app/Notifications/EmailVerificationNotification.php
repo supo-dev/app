@@ -32,7 +32,7 @@ final class EmailVerificationNotification extends Notification implements Should
     {
         return (new MailMessage)
             ->subject('Verify Your Email Address')
-            ->greeting("Hello, {$notifiable->name}")
+            ->greeting("Hello, {$notifiable->username}")
             ->line('Please verify your email address by using the verification code below:')
             ->line("**Verification Code: {$this->token}**")
             ->line('This code will expire in 60 minutes.')

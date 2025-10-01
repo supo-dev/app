@@ -50,7 +50,7 @@ it('can verify email with valid token', function (): void {
         'message',
         'user' => [
             'id',
-            'name',
+            'username',
             'email',
             'email_verified',
         ],

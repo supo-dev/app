@@ -20,7 +20,7 @@ final readonly class UserController
     {
         return response()->json([
             'id' => $user->id,
-            'name' => $user->name,
+            'username' => $user->username,
             'email' => $user->email,
             'email_verified' => $user->email_verified_at !== null,
             'created_at' => $user->created_at->toISOString(),
@@ -32,12 +32,11 @@ final readonly class UserController
 
     public function store(CreateUserRequest $request, CreateUser $action): Response
     {
-        $name = $request->string('name')->toString();
-        $email = $request->string('email')->toString();
         $username = $request->string('username')->toString();
+        $email = $request->string('email')->toString();
         $password = $request->string('password')->toString();
 
-        $action->handle($name, $email, $username, $password);
+        $action->handle($username, $email, $password);
 
         return response(status: 201);
     }
@@ -51,7 +50,7 @@ final readonly class UserController
 
         return response()->json([
             'id' => $updatedUser->id,
-            'name' => $updatedUser->name,
+            'username' => $updatedUser->username,
             'email' => $updatedUser->email,
             'created_at' => $updatedUser->created_at->toISOString(),
         ]);

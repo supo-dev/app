@@ -20,7 +20,7 @@ final readonly class SessionController
             'authenticated' => true,
             'user' => [
                 'id' => $user->id,
-                'name' => $user->name,
+                'username' => $user->username,
                 'email' => $user->email,
             ],
         ]);
@@ -36,7 +36,7 @@ final readonly class SessionController
         return response()->json([
             'user' => [
                 'id' => $result['user']->id,
-                'name' => $result['user']->name,
+                'username' => $result['user']->username,
                 'email' => $result['user']->email,
             ],
             'token' => $result['token'],

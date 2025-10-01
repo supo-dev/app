@@ -21,7 +21,7 @@ it('can login a user', function () {
     $response->assertJsonStructure([
         'user' => [
             'id',
-            'name',
+            'username',
             'email',
         ],
         'token',
@@ -29,7 +29,7 @@ it('can login a user', function () {
     $response->assertJson([
         'user' => [
             'id' => $user->id,
-            'name' => $user->name,
+            'username' => $user->username,
             'email' => 'john@example.com',
         ],
     ]);
@@ -56,7 +56,7 @@ it('validates required login fields', function () {
 
 it('can check current session when authenticated', function () {
     $user = User::factory()->create([
-        'name' => 'John Doe',
+        'username' => 'doe',
         'email' => 'john@example.com',
     ]);
 
@@ -69,7 +69,7 @@ it('can check current session when authenticated', function () {
         'authenticated' => true,
         'user' => [
             'id' => $user->id,
-            'name' => 'John Doe',
+            'username' => 'doe',
             'email' => 'john@example.com',
         ],
     ]);
