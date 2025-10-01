@@ -12,8 +12,10 @@ use Illuminate\Foundation\Http\FormRequest;
 
 final class DeletePostRequest extends FormRequest
 {
-    public function authorize(#[CurrentUser] User $user, #[RouteParameter('post')] Post $post): bool
-    {
+    public function authorize(
+        #[CurrentUser] User $user,
+        #[RouteParameter('post')] Post $post
+    ): bool {
         return $post->user()->is($user);
     }
 }

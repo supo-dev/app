@@ -55,8 +55,10 @@ final readonly class UserController
         ]);
     }
 
-    public function destroy(#[CurrentUser] User $user, DeleteUser $action): Response
-    {
+    public function destroy(
+        #[CurrentUser] User $user,
+        DeleteUser $action
+    ): Response {
         $action->handle($user);
 
         return response(status: 204);

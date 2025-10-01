@@ -20,8 +20,11 @@ final readonly class PostController
         return response($post->toArray(), 200);
     }
 
-    public function store(CreatePostRequest $request, CreatePost $action, #[CurrentUser] User $loggedInUser): Response
-    {
+    public function store(
+        CreatePostRequest $request,
+        CreatePost $action,
+        #[CurrentUser] User $loggedInUser
+    ): Response {
         $content = $request->string('content')->toString();
 
         $action->handle($loggedInUser, $content);

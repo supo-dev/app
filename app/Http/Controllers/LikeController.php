@@ -15,15 +15,23 @@ use Illuminate\Http\Response;
 
 final readonly class LikeController
 {
-    public function store(LikePostRequest $request, Post $post, LikePost $action, #[CurrentUser] User $loggedInUser): Response
-    {
+    public function store(
+        LikePostRequest $request,
+        Post $post,
+        LikePost $action,
+        #[CurrentUser] User $loggedInUser
+    ): Response {
         $action->handle($loggedInUser, $post);
 
         return response(status: 201);
     }
 
-    public function destroy(UnlikePostRequest $request, Post $post, UnlikePost $action, #[CurrentUser] User $loggedInUser): Response
-    {
+    public function destroy(
+        UnlikePostRequest $request,
+        Post $post,
+        UnlikePost $action,
+        #[CurrentUser] User $loggedInUser
+    ): Response {
         $action->handle($loggedInUser, $post);
 
         return response(status: 204);

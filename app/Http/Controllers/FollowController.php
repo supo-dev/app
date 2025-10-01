@@ -12,15 +12,21 @@ use Illuminate\Http\Response;
 
 final class FollowController
 {
-    public function store(#[CurrentUser] User $loggedInUser, User $user, FollowUser $action): Response
-    {
+    public function store(
+        #[CurrentUser] User $loggedInUser,
+        User $user,
+        FollowUser $action
+    ): Response {
         $action->handle($loggedInUser, $user);
 
         return response(status: 201);
     }
 
-    public function destroy(#[CurrentUser] User $loggedInUser, User $user, UnfollowUser $action): Response
-    {
+    public function destroy(
+        #[CurrentUser] User $loggedInUser,
+        User $user,
+        UnfollowUser $action
+    ): Response {
         $action->handle($loggedInUser, $user);
 
         return response(status: 204);

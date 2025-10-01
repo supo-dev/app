@@ -11,16 +11,19 @@ use Illuminate\Foundation\Http\FormRequest;
 
 final class UpdateUserRequest extends FormRequest
 {
-    public function authorize(#[CurrentUser] User $currentUser, #[RouteParameter('user')] User $user): bool
-    {
+    public function authorize(
+        #[CurrentUser] User $currentUser,
+        #[RouteParameter('user')] User $user
+    ): bool {
         return $currentUser->is($user);
     }
 
     /**
      * @return array<string, array<int, string>>
      */
-    public function rules(#[CurrentUser] User $user): array
-    {
+    public function rules(
+        #[CurrentUser] User $user
+    ): array {
         return [
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'email' => ['sometimes', 'required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],

@@ -8,8 +8,11 @@ use App\Models\User;
 
 final readonly class UpdateUser
 {
-    public function handle(User $user, ?string $name = null, ?string $email = null): User
-    {
+    public function handle(
+        User $user,
+        ?string $name = null,
+        ?string $email = null
+    ): User {
         $data = [];
 
         if ($name !== null) {

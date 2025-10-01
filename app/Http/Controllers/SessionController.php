@@ -13,8 +13,9 @@ use Illuminate\Http\Response;
 
 final readonly class SessionController
 {
-    public function show(#[CurrentUser] User $user): JsonResponse
-    {
+    public function show(
+        #[CurrentUser] User $user
+    ): JsonResponse {
         return response()->json([
             'authenticated' => true,
             'user' => [
@@ -42,8 +43,9 @@ final readonly class SessionController
         ]);
     }
 
-    public function destroy(#[CurrentUser] User $user): Response
-    {
+    public function destroy(
+        #[CurrentUser] User $user
+    ): Response {
         $user->currentAccessToken()->delete();
 
         return response(status: 204);
