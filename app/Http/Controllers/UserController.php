@@ -22,6 +22,7 @@ final readonly class UserController
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
+            'email_verified' => $user->email_verified_at !== null,
             'created_at' => $user->created_at->toISOString(),
             'posts_count' => $user->posts()->count(),
             'followers_count' => $user->followers()->count(),

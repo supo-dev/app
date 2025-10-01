@@ -4,7 +4,13 @@ declare(strict_types=1);
 
 use App\Http\Controllers\UserController;
 use App\Models\User;
+use App\Notifications\EmailVerificationNotification;
+use Illuminate\Support\Facades\Notification;
 use Laravel\Sanctum\Sanctum;
+
+beforeEach(function (): void {
+    Notification::fake();
+});
 
 it('can create a user', function () {
     $response = $this->postJson(action([UserController::class, 'store']), [
@@ -20,7 +26,10 @@ it('can create a user', function () {
     expect($user)
         ->not->toBeNull()
         ->and($user->name)->toBe('John Doe')
-        ->and($user->email)->toBe('john@example.com');
+        ->and($user->email)->toBe('john@example.com')
+        ->and($user->email_verified_at)->toBeNull();
+
+    Notification::assertSentTo($user, EmailVerificationNotification::class);
 });
 
 it('validates required fields when creating a user', function () {
@@ -90,6 +99,7 @@ it('can update user profile', function () {
     $user = User::factory()->create([
         'name' => 'John Doe',
         'email' => 'john@example.com',
+        'email_verified_at' => now(),
     ]);
 
     Sanctum::actingAs($user, ['*']);
@@ -108,13 +118,17 @@ it('can update user profile', function () {
 
     $user->refresh();
     expect($user->name)->toBe('Jane Doe')
-        ->and($user->email)->toBe('jane@example.com');
+        ->and($user->email)->toBe('jane@example.com')
+        ->and($user->email_verified_at)->toBeNull();
+
+    Notification::assertSentTo($user, EmailVerificationNotification::class);
 });
 
 it('can partially update user profile', function () {
     $user = User::factory()->create([
         'name' => 'John Doe',
         'email' => 'john@example.com',
+        'email_verified_at' => now(),
     ]);
 
     Sanctum::actingAs($user, ['*']);
@@ -132,7 +146,10 @@ it('can partially update user profile', function () {
 
     $user->refresh();
     expect($user->name)->toBe('Jane Doe')
-        ->and($user->email)->toBe('john@example.com');
+        ->and($user->email)->toBe('john@example.com')
+        ->and($user->email_verified_at)->not->toBeNull();
+
+    Notification::assertNothingSent();
 });
 
 it('validates email uniqueness when updating user profile', function () {
@@ -150,7 +167,10 @@ it('validates email uniqueness when updating user profile', function () {
 });
 
 it('allows keeping same email when updating user profile', function () {
-    $user = User::factory()->create(['email' => 'john@example.com']);
+    $user = User::factory()->create([
+        'email' => 'john@example.com',
+        'email_verified_at' => now(),
+    ]);
 
     Sanctum::actingAs($user, ['*']);
 
@@ -160,6 +180,11 @@ it('allows keeping same email when updating user profile', function () {
     ]);
 
     $response->assertOk();
+
+    $user->refresh();
+    expect($user->email_verified_at)->not->toBeNull();
+
+    Notification::assertNothingSent();
 });
 
 it('requires authentication to show user profile', function () {

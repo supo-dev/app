@@ -22,6 +22,10 @@
 - [POST] **/users - Register New User** DONE
 - [DELETE] **/users - Delete User Account** DONE
 
+### Email Verification (end)
+- [POST] **/email/send-verification - Resend Verification Email** DONE
+- [POST] **/email/verify - Verify Email with Token** DONE
+
 ### Login & Session Management (end)
 - [GET] **/sessions - Check Current Session** DONE
 - [POST] **/sessions - Login** DONE

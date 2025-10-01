@@ -9,15 +9,24 @@ use SensitiveParameter;
 
 final readonly class CreateUser
 {
+    public function __construct(
+        private SendEmailVerification $sendEmailVerification
+    ) {}
+
     public function handle(
         string $name,
         string $email,
         #[SensitiveParameter] string $password
     ): User {
-        return User::query()->create([
+        $user = User::query()->create([
             'name' => $name,
             'email' => $email,
             'password' => $password,
+            'email_verified_at' => null,
         ]);
+
+        $this->sendEmailVerification->handle($user);
+
+        return $user;
     }
 }

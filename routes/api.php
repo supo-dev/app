@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
@@ -38,4 +39,8 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
     // Likes...
     Route::post('/likes/{post}', [LikeController::class, 'store']);
     Route::delete('/likes/{post}', [LikeController::class, 'destroy']);
+
+    // Email Verification...
+    Route::post('/email/send-verification', [EmailVerificationController::class, 'send']);
+    Route::post('/email/verify', [EmailVerificationController::class, 'verify']);
 });
