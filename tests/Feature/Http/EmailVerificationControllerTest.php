@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\UserEmailVerificationController;
 use App\Models\User;
 use App\Notifications\EmailVerificationNotification;
 use App\Support\EmailVerificationTokenManager;
@@ -18,7 +17,7 @@ it('can send email verification', function (): void {
 
     Sanctum::actingAs($user, ['*']);
 
-    $response = $this->postJson(action([UserEmailVerificationController::class, 'show']));
+    $response = $this->postJson(route('email.send-verification'));
 
     $response->assertStatus(200);
 
@@ -29,7 +28,7 @@ it('can send email verification', function (): void {
 });
 
 it('requires authentication to send verification', function (): void {
-    $response = $this->postJson(action([UserEmailVerificationController::class, 'show']));
+    $response = $this->postJson(route('email.send-verification'));
 
     $response->assertStatus(401);
 });
@@ -41,7 +40,7 @@ it('can verify email with valid token', function (): void {
 
     Sanctum::actingAs($user, ['*']);
 
-    $response = $this->postJson(action([UserEmailVerificationController::class, 'update']), [
+    $response = $this->postJson(route('email.verify'), [
         'token' => $token,
     ]);
 
@@ -69,7 +68,7 @@ it('rejects invalid token for verification', function (): void {
 
     Sanctum::actingAs($user, ['*']);
 
-    $response = $this->postJson(action([UserEmailVerificationController::class, 'update']), [
+    $response = $this->postJson(route('email.verify'), [
         'token' => 'INVALID1',
     ]);
 
@@ -83,7 +82,7 @@ it('rejects invalid token for verification', function (): void {
 });
 
 it('requires authentication to verify email', function (): void {
-    $response = $this->postJson(action([UserEmailVerificationController::class, 'update']), [
+    $response = $this->postJson(route('email.verify'), [
         'token' => 'ABCD1234',
     ]);
 
@@ -95,7 +94,7 @@ it('validates token format when verifying', function (): void {
 
     Sanctum::actingAs($user, ['*']);
 
-    $response = $this->postJson(action([UserEmailVerificationController::class, 'update']), [
+    $response = $this->postJson(route('email.verify'), [
         'token' => 'short',
     ]);
 
