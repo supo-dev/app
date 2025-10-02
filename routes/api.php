@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\ForYouFeedController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SessionController;
@@ -31,6 +32,10 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
     Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+    // Feeds...
+    Route::get('/feeds/for-you', ForYouFeedController::class)->name('feeds.for-you')
+        ->withoutMiddleware('auth:sanctum');
 
     // Follows...
     Route::post('/follows/{user}', [FollowController::class, 'store'])->name('follows.store');
