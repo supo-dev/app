@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use App\Models\Post;
 use App\Models\User;
-use App\Queries\FollowingFeed;
+use App\Queries\FollowingFeedQuery;
 use Illuminate\Database\Eloquent\Builder;
 
 it('may return a query builder', function (): void {
     $user = User::factory()->create();
-    $followingFeed = new FollowingFeed($user);
+    $followingFeed = new FollowingFeedQuery($user);
 
     $builder = $followingFeed->builder();
 
@@ -35,7 +35,7 @@ it('may return posts from followed users by updated date', function (): void {
     // post from a user not followed
     Post::factory()->create(['user_id' => $otherUser->id]);
 
-    $followingFeed = new FollowingFeed($user);
+    $followingFeed = new FollowingFeedQuery($user);
     $posts = $followingFeed->builder()->get();
 
     expect($posts)->toHaveCount(2)
@@ -46,7 +46,7 @@ it('may return empty collection when user follows no one', function (): void {
     $user = User::factory()->create();
     Post::factory()->create();
 
-    $followingFeed = new FollowingFeed($user);
+    $followingFeed = new FollowingFeedQuery($user);
     $posts = $followingFeed->builder()->get();
 
     expect($posts)->toHaveCount(0);
