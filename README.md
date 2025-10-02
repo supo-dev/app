@@ -38,4 +38,4 @@
 
 ### Feed Management
 
-- [GET] **/feeds/{feed_type} - Get Feed (feed_type can be 'home' or 'explore')**
+- [GET] **/feeds/{feed_type} - Get Feed (feed_type can be 'for-you' or 'following')** DONE

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\FollowingFeedController;
 use App\Http\Controllers\ForYouFeedController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
@@ -36,6 +37,7 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
     // Feeds...
     Route::get('/feeds/for-you', ForYouFeedController::class)->name('feeds.for-you')
         ->withoutMiddleware('auth:sanctum');
+    Route::get('/feeds/following', FollowingFeedController::class)->name('feeds.following');
 
     // Follows...
     Route::post('/follows/{user}', [FollowController::class, 'store'])->name('follows.store');
