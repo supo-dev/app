@@ -17,7 +17,7 @@ final class BlockedUser extends Model
     /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
-        return $this->BelongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     /** @return BelongsTo<User, $this> */

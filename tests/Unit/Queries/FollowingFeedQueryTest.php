@@ -58,6 +58,7 @@ it('may not return posts from users blocked by the user', function (): void {
     $followedUser = User::factory()->create();
 
     app(App\Actions\FollowUser::class)->handle($user, $followedUser);
+    app(App\Actions\FollowUser::class)->handle($user, $blockedUser);
     app(App\Actions\BlockUser::class)->handle($user, $blockedUser);
 
     $followedPost = Post::factory()->create([
