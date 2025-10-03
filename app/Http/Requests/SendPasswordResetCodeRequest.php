@@ -14,7 +14,7 @@ final class SendPasswordResetCodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['bail', 'required', 'email', 'exists:users'],
+            'email' => ['bail', 'required', 'email'],
         ];
     }
 }
