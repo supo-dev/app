@@ -27,7 +27,7 @@ it('can reset password using a valid token', function (): void {
     Notification::assertSentTo($user, PasswordResetNotification::class, function (PasswordResetNotification $notification) use ($user) {
         $notificationData = $notification->toArray($user);
 
-        test()->postJson(route('password.reset'), [
+        $this->putJson(route('password.reset'), [
             'token' => $notificationData['token'] ?? '',
             'email' => $user->email,
             'password' => 'password',
@@ -43,7 +43,7 @@ it('can reset password using a valid token', function (): void {
 it('throws validation exception when invalid token is used', function (): void {
     $user = User::factory()->create();
 
-    $response = $this->postJson(route('password.reset'), [
+    $response = $this->putJson(route('password.reset'), [
         'email' => $user->email,
         'token' => 'invalid-token',
         'password' => 'NewSecurePassword123!',
@@ -62,7 +62,7 @@ it('throws validation exception when passwords do not match', function (): void 
     Notification::assertSentTo($user, PasswordResetNotification::class, function (PasswordResetNotification $notification) use ($user) {
         $notificationData = $notification->toArray($user);
 
-        $response = $this->postJson(route('password.reset'), [
+        $response = $this->putJson(route('password.reset'), [
             'token' => $notificationData['token'] ?? '',
             'email' => $user->email,
             'password' => 'NewSecurePassword123!',

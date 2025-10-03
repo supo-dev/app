@@ -18,7 +18,7 @@ Route::post('/sessions', [SessionController::class, 'store'])->name('sessions.st
 
 // Password Reset...
 Route::post('/password/email', [PasswordResetController::class, 'store'])->name('password.email');
-Route::post('/password/reset', [PasswordResetController::class, 'update'])->name('password.reset');
+Route::put('/password/reset', [PasswordResetController::class, 'update'])->name('password.reset');
 
 // Users...
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
