@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\PostController;
 use App\Models\Post;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
@@ -13,7 +12,7 @@ it('may view a post', function () {
 
     Sanctum::actingAs($user, ['*']);
 
-    $response = $this->getJson(action([PostController::class, 'show'], $post));
+    $response = $this->getJson(route('posts.show', $post));
 
     $response->assertStatus(200);
     $response->assertJson($post->fresh()->toArray());
@@ -24,7 +23,7 @@ it('can create a post', function () {
 
     Sanctum::actingAs($user, ['*']);
 
-    $response = $this->postJson(action([PostController::class, 'store']), [
+    $response = $this->postJson(route('posts.store'), [
         'content' => 'This is a test post.',
     ]);
 
@@ -43,7 +42,7 @@ it('may delete a post', function () {
 
     Sanctum::actingAs($user, ['*']);
 
-    $response = $this->deleteJson(action([PostController::class, 'destroy'], $post));
+    $response = $this->deleteJson(route('posts.destroy', $post));
 
     $response->assertStatus(204);
 
@@ -58,7 +57,7 @@ test('cannot delete another users post', function () {
 
     Sanctum::actingAs($otherUser, ['*']);
 
-    $response = $this->deleteJson(action([PostController::class, 'destroy'], $post));
+    $response = $this->deleteJson(route('posts.destroy', $post));
 
     $response->assertStatus(403);
 
