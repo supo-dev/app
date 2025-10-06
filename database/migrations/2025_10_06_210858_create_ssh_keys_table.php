@@ -13,8 +13,7 @@ return new class extends Migration
         Schema::create('ssh_keys', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->text('public_key');
-            $table->string('fingerprint')->unique();
+            $table->text('public_key')->unique();
             $table->timestamps();
         });
     }

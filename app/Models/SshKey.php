@@ -14,7 +14,6 @@ use Illuminate\Support\Carbon;
  * @property-read int $id
  * @property-read int $user_id
  * @property-read string $public_key
- * @property-read string $fingerprint
  * @property-read Carbon $created_at
  * @property-read Carbon $updated_at
  * @property-read User $user
@@ -33,7 +32,6 @@ final class SshKey extends Model
             'id' => 'integer',
             'user_id' => 'integer',
             'public_key' => 'string',
-            'fingerprint' => 'string',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];

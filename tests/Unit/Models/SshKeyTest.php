@@ -13,7 +13,6 @@ test('to array', function () {
             'id',
             'user_id',
             'public_key',
-            'fingerprint',
             'created_at',
             'updated_at',
         ]);

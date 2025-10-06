@@ -18,13 +18,9 @@ final class SshKeyFactory extends Factory
      */
     public function definition(): array
     {
-        $publicKey = 'ssh-rsa '.base64_encode(random_bytes(256)).' '.$this->faker->userName().'@'.$this->faker->domainName();
-        $fingerprint = 'SHA256:'.base64_encode(hash('sha256', $publicKey, true));
-
         return [
             'user_id' => User::factory(),
-            'public_key' => $publicKey,
-            'fingerprint' => $fingerprint,
+            'public_key' => 'ssh-rsa '.base64_encode(random_bytes(256)).' '.$this->faker->userName().'@'.$this->faker->domainName(),
         ];
     }
 }
