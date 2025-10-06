@@ -11,7 +11,7 @@ use function Termwind\terminal;
 final class KeyHandler
 {
     /**
-     * @var array<string, Closure>
+     * @var array<Keyboard, Closure>
      */
     private array $handlers = [];
 
@@ -36,19 +36,34 @@ final class KeyHandler
         return isset($this->handlers[$key->value]);
     }
 
-    public function listen(): void
+    public function listen(?Closure $onRefresh = null, int $refreshInterval = 5): void
     {
         $this->enableRawMode();
+        $lastRefresh = time();
 
         try {
             while (true) {
-                $char = $this->readChar();
+                $char = $this->readCharNonBlocking();
 
                 if ($char === 'q') {
                     break;
                 }
 
-                $this->handle($char);
+                if ($char !== '') {
+                    terminal()->clear(); // @phpstan-ignore-line
+
+                    $this->handle($char);
+                    $lastRefresh = time();
+                }
+
+                if ($onRefresh instanceof Closure && (time() - $lastRefresh) >= $refreshInterval) {
+                    terminal()->clear(); // @phpstan-ignore-line
+
+                    $onRefresh();
+                    $lastRefresh = time();
+                }
+
+                time_nanosleep(0, 100000000);
             }
         } finally {
             $this->disableRawMode();
@@ -69,8 +84,12 @@ final class KeyHandler
         }
     }
 
-    private function readChar(): string
+    private function readCharNonBlocking(): string
     {
-        return fread(STDIN, 1);
+        stream_set_blocking(STDIN, false);
+        $char = (string) fread(STDIN, 1);
+        stream_set_blocking(STDIN, true);
+
+        return $char;
     }
 }

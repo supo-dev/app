@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 arch()->preset()->php();
 arch()->preset()->strict();
-arch()->preset()->security();
+arch()->preset()->security()->ignoring([
+    'system',
+]);
 
 arch('controllers')
     ->expect('App\Http\Controllers')

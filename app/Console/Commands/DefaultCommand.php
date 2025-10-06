@@ -22,12 +22,26 @@ final class DefaultCommand extends Command
     {
         $this->call(SignInCommand::class);
 
+        $currentCommand = 'app:following';
+
         $handler
-            ->on(Keyboard::F, fn () => $this->call(FollowingCommand::class))
+            ->on(Keyboard::F, function () use (&$currentCommand): void {
+                $currentCommand = 'app:following';
+                $this->call(FollowingCommand::class);
+            })
+            ->on(Keyboard::E, function () use (&$currentCommand): void {
+                $currentCommand = 'app:explore';
+                $this->call(ExploreCommand::class);
+            })
             ->on(Keyboard::P, fn () => $this->call(CreatePostCommand::class));
 
         $this->call(FollowingCommand::class);
 
-        $handler->listen();
+        $handler->listen(
+            onRefresh: function () use (&$currentCommand): void {
+                $this->call($currentCommand);
+            },
+            refreshInterval: 5
+        );
     }
 }

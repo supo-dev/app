@@ -34,6 +34,15 @@ This application is a Laravel application and its main Laravel ecosystems packag
 ## Frontend Bundling
 - If the user doesn't see a frontend change reflected in the UI, it could mean they need to run `npm run build`, `npm run dev`, or `composer run dev`. Ask them.
 
+## Termwind / TUI Views
+- This application uses Termwind to render Blade views in the terminal as a TUI (Terminal User Interface).
+- **Unsupported Tailwind classes**: Termwind does not support all Tailwind CSS classes. The following classes are confirmed NOT to work:
+  - `text-sm`, `text-xs`, `text-lg`, `text-xl`, etc. (font size modifiers beyond base)
+  - `border-t`, `border-b`, `border-l`, `border-r` (directional borders)
+  - Many other advanced Tailwind utilities may not be supported
+- **Supported classes**: Basic utilities like `text-white`, `text-gray`, `flex`, `space-x-*`, `p-*` (padding), `w-*`, `font-bold` work well.
+- Always test Termwind views in the terminal and avoid unsupported classes.
+
 ## Replies
 - Be concise in your explanations - focus on what's important rather than explaining obvious details.
 

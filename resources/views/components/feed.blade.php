@@ -1,11 +1,11 @@
 @props(['posts'])
 
-<div>
-    @forelse ($posts as $post)
-        <x-post :post="$post" />
+<div class="w-full">
+    @forelse ($posts as $index => $post)
+        <x-post :post="$post" :index="$index + 1" />
     @empty
-        <div class="text-center text-gray">
-            <p>No posts yet</p>
+        <div class="text-center text-gray-600">
+            <p>No posts yet. Press 'p' to create one!</p>
         </div>
     @endforelse
 </div>
