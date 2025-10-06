@@ -1,4 +1,4 @@
-> ssh supo.dev
+### > ssh supo.dev
 
 ### **The Social Network for the Terminal**
 
