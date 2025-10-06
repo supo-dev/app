@@ -16,9 +16,7 @@ it('may login a user with correct credentials', function (): void {
     $result = $action->handle('john@example.com', 'password123');
 
     expect($result)->toBeArray()
-        ->and($result['user']->id)->toBe($user->id)
-        ->and($result['token'])->toBeString()
-        ->and(mb_strlen($result['token']))->toBeGreaterThan(0);
+        ->and($result['user']->id)->toBe($user->id);
 });
 
 it('throws exception for invalid email', function (): void {

@@ -21,11 +21,8 @@ final readonly class LoginUser
             'email' => ['The provided credentials are incorrect.'],
         ]));
 
-        $token = $user->createToken('api-token')->plainTextToken;
-
         return [
             'user' => $user,
-            'token' => $token,
         ];
     }
 }
