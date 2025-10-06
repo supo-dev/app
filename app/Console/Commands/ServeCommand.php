@@ -7,12 +7,12 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Whisp\Server;
 
-final class SshServerCommand extends Command
+final class ServeCommand extends Command
 {
     /**
      * @var string
      */
-    protected $signature = 'app:ssh-server';
+    protected $signature = 'app:serve';
 
     public function handle(): void
     {

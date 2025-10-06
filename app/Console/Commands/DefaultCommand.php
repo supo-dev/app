@@ -18,6 +18,8 @@ final class DefaultCommand extends Command
      */
     public function handle(): void
     {
-        //
+        $this->call(SignInCommand::class);
+
+        $this->call(FollowingCommand::class);
     }
 }

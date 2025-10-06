@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Carbon\CarbonInterface;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -38,6 +39,13 @@ final class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public static function bySshKey(string $sshKey): ?self
+    {
+        return self::query()->whereHas('sshKeys', function (Builder $query) use ($sshKey): void {
+            $query->where('public_key', $sshKey);
+        })->first();
+    }
 
     /**
      * @return array<string, string>

@@ -101,10 +101,15 @@ protected function isAccessible(User $user, ?string $path = null): bool
 </code-snippet>
 
 ## Comments
-- Prefer PHPDoc blocks over comments. Never use comments within the code itself unless there is something _very_ complex going on.
+- **Only use PHPDoc comments that provide typing information.**
+- Never use descriptive comments explaining what code does - the code should be self-explanatory.
+- Never use empty comments like `//` or `/* */`.
+- Never use inline comments within code unless there is something _very_ complex going on.
 
 ## PHPDoc Blocks
-- Add useful array shape type definitions for arrays when appropriate.
+- **Required PHPDoc**: `@return` for complex return types, `@var` for typed properties, `@property-read` for magic properties, `@use` for trait generics, `@param` only when type is complex.
+- **Allowed PHPDoc**: Array shape definitions like `@return array{user: User, token: string}`.
+- **Not allowed**: Descriptive comments like "Execute the console command", "Create a new instance", "Get the user's name", etc.
 
 ## Enums
 - Typically, keys in an Enum should be TitleCase. For example: `FavoritePerson`, `BestLake`, `Monthly`.
