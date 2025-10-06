@@ -50,3 +50,11 @@ test('relation followers', function () {
         ->each->toBeInstanceOf(User::class)
         ->and($userA->followers->first()->id)->toBe($userB->id);
 });
+
+test('relation ssh keys', function () {
+    $user = User::factory()->hasSshKeys(3)->create()->fresh();
+
+    expect($user->sshKeys)
+        ->toHaveCount(3)
+        ->each->toBeInstanceOf(App\Models\SshKey::class);
+});

@@ -4,26 +4,24 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Database\Factories\PostFactory;
-use Illuminate\Database\Eloquent\Collection;
+use Database\Factories\SshKeyFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
  * @property-read int $id
  * @property-read int $user_id
- * @property-read string $content
+ * @property-read string $public_key
+ * @property-read string $fingerprint
  * @property-read Carbon $created_at
  * @property-read Carbon $updated_at
  * @property-read User $user
- * @property-read Collection<int, Like> $likes
  */
-final class Post extends Model
+final class SshKey extends Model
 {
-    /** @use HasFactory<PostFactory> */
+    /** @use HasFactory<SshKeyFactory> */
     use HasFactory;
 
     /**
@@ -34,7 +32,8 @@ final class Post extends Model
         return [
             'id' => 'integer',
             'user_id' => 'integer',
-            'content' => 'string',
+            'public_key' => 'string',
+            'fingerprint' => 'string',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -46,13 +45,5 @@ final class Post extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @return HasMany<Like, $this>
-     */
-    public function likes(): HasMany
-    {
-        return $this->hasMany(Like::class);
     }
 }

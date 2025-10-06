@@ -7,6 +7,7 @@ namespace App\Models;
 use Carbon\CarbonInterface;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,6 +23,11 @@ use Illuminate\Notifications\Notifiable;
  * @property-read string|null $remember_token
  * @property-read CarbonInterface $created_at
  * @property-read CarbonInterface $updated_at
+ * @property-read Collection<int, Post> $posts
+ * @property-read Collection<int, Like> $likes
+ * @property-read Collection<int, User> $followers
+ * @property-read Collection<int, User> $following
+ * @property-read Collection<int, SshKey> $sshKeys
  */
 final class User extends Authenticatable implements MustVerifyEmail
 {
@@ -42,8 +48,14 @@ final class User extends Authenticatable implements MustVerifyEmail
     public function casts(): array
     {
         return [
+            'id' => 'integer',
+            'username' => 'string',
+            'email' => 'string',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'remember_token' => 'string',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
@@ -77,5 +89,13 @@ final class User extends Authenticatable implements MustVerifyEmail
     public function following(): BelongsToMany
     {
         return $this->belongsToMany(self::class, 'followers', 'follower_id', 'user_id');
+    }
+
+    /**
+     * @return HasMany<SshKey, $this>
+     */
+    public function sshKeys(): HasMany
+    {
+        return $this->hasMany(SshKey::class);
     }
 }
