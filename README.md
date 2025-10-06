@@ -19,9 +19,6 @@
 
 ---
 
-
----
-
 ## 🔥 What is Supo?
 
 Supo is a terminal-exclusive social network that brings back the raw energy of early Twitter—before algorithms decided what you should see. It's built by developers, for developers.
