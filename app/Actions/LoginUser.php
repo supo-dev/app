@@ -11,14 +11,14 @@ use Illuminate\Validation\ValidationException;
 final readonly class LoginUser
 {
     /**
-     * @return array{user: User, token: string}
+     * @return array{user: User}
      */
-    public function handle(string $email, string $password): array
+    public function handle(string $username, string $password): array
     {
-        $user = User::query()->where('email', $email)->first();
+        $user = User::query()->where('username', $username)->first();
 
         throw_if(! $user || ! Hash::check($password, $user->password), ValidationException::withMessages([
-            'email' => ['The provided credentials are incorrect.'],
+            'username' => ['The provided credentials are incorrect.'],
         ]));
 
         return [

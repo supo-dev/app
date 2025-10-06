@@ -8,14 +8,9 @@ use App\Models\User;
 
 final readonly class UpdateUser
 {
-    public function __construct(
-        private SendEmailVerification $sendEmailVerification
-    ) {}
-
     public function handle(
         User $user,
-        ?string $username = null,
-        ?string $email = null
+        ?string $username = null
     ): User {
         $data = [];
 
@@ -23,16 +18,7 @@ final readonly class UpdateUser
             $data['username'] = $username;
         }
 
-        if ($email !== null && $email !== $user->email) {
-            $data['email'] = $email;
-            $data['email_verified_at'] = null;
-        }
-
         $user->update($data);
-
-        if ($user->wasChanged('email')) {
-            $this->sendEmailVerification->handle($user);
-        }
 
         return $user;
     }

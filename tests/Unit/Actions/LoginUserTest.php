@@ -8,31 +8,31 @@ use Illuminate\Validation\ValidationException;
 
 it('may login a user with correct credentials', function (): void {
     $user = User::factory()->create([
-        'email' => 'john@example.com',
+        'username' => 'johndoe',
         'password' => bcrypt('password123'),
     ]);
     $action = app(LoginUser::class);
 
-    $result = $action->handle('john@example.com', 'password123');
+    $result = $action->handle('johndoe', 'password123');
 
     expect($result)->toBeArray()
         ->and($result['user']->id)->toBe($user->id);
 });
 
-it('throws exception for invalid email', function (): void {
+it('throws exception for invalid username', function (): void {
     $action = app(LoginUser::class);
 
-    expect(fn () => $action->handle('invalid@example.com', 'password123'))
+    expect(fn () => $action->handle('invaliduser', 'password123'))
         ->toThrow(ValidationException::class);
 });
 
 it('throws exception for invalid password', function (): void {
     User::factory()->create([
-        'email' => 'john@example.com',
+        'username' => 'johndoe',
         'password' => bcrypt('correct-password'),
     ]);
     $action = app(LoginUser::class);
 
-    expect(fn () => $action->handle('john@example.com', 'wrong-password'))
+    expect(fn () => $action->handle('johndoe', 'wrong-password'))
         ->toThrow(ValidationException::class);
 });
