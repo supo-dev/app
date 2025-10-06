@@ -6,6 +6,7 @@ namespace App\Support;
 
 use App\Enums\Support\Keyboard;
 use Closure;
+use function Termwind\terminal;
 
 final class KeyHandler
 {
@@ -37,14 +38,39 @@ final class KeyHandler
 
     public function listen(): void
     {
-        while (true) {
-            $input = trim(fgets(STDIN));
+        $this->enableRawMode();
 
-            if ($input === 'q') {
-                break;
+        try {
+            while (true) {
+                $char = $this->readChar();
+
+                if ($char === 'q') {
+                    break;
+                }
+
+                $this->handle($char);
             }
-
-            $this->handle($input);
+        } finally {
+            $this->disableRawMode();
         }
+    }
+
+    private function enableRawMode(): void
+    {
+        if (PHP_OS_FAMILY !== 'Windows') {
+            system('stty -icanon -echo');
+        }
+    }
+
+    private function disableRawMode(): void
+    {
+        if (PHP_OS_FAMILY !== 'Windows') {
+            system('stty icanon echo');
+        }
+    }
+
+    private function readChar(): string
+    {
+        return fread(STDIN, 1);
     }
 }
