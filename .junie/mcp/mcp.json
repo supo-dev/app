@@ -3,7 +3,7 @@
         "laravel-boost": {
             "command": "/Users/nunomaduro/Library/Application Support/Herd/bin/php84",
             "args": [
-                "/Users/nunomaduro/Work/projects/supo-dev/api/artisan",
+                "/Users/nunomaduro/Work/projects/supo-dev/app/artisan",
                 "boost:mcp"
             ]
         }
