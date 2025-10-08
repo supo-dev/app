@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Database\Eloquent\Builder;
 
-final readonly class FollowingFeedQuery
+final readonly class UserPostsQuery
 {
     public function __construct(
         #[CurrentUser] private User $user
@@ -20,11 +20,9 @@ final readonly class FollowingFeedQuery
      */
     public function builder(): Builder
     {
-        $followingIds = $this->user->following()->pluck('users.id');
-
         return Post::query()
-            ->whereIn('user_id', [...$followingIds, $this->user->id])
+            ->where('user_id', $this->user->id)
             ->with(['user', 'likes'])
-            ->latest('updated_at');
+            ->latest('created_at');
     }
 }

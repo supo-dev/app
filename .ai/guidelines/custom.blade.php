@@ -5,8 +5,8 @@
   - `border-t`, `border-b`, `border-l`, `border-r` (directional borders)
   - Many other advanced Tailwind utilities may not be supported
 - **Supported classes**: Basic utilities like `text-white`, `text-gray`, `flex`, `space-x-*`, `p-*` (padding), `w-*`, `font-bold` work well.
-- Always test Termwind views in the terminal and avoid unsupported classes.
-
+- **CRITICAL: Always re-run commands after making changes** - You must run `php servers/testing.php \\App\\Console\\Commands\\{CommandClass}` after every design change to verify the output looks correct in the terminal. Continue iterating and re-running until the design is perfect.
+- When designing TUI views, iterate multiple times, re-running the command each time to check your changes, until you are 100% confident the design is really good and polished.
 
 ## Comments
 - **Only use PHPDoc comments that provide typing information.**
@@ -19,4 +19,5 @@
 - **Allowed PHPDoc**: Array shape definitions like `@return array{user: User, token: string}`.
 - **Not allowed**: Descriptive comments like "Execute the console command", "Create a new instance", "Get the user's name", etc.
 
-
+# IMPORTANT: Testing Commands
+- When testing commands, you should **always** run: `php servers/testing.php \\App\\Console\\Commands\\{CommandClass}`

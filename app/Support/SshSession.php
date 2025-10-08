@@ -15,7 +15,7 @@ final readonly class SshSession
 
     public static function fromEnvironment(): self
     {
-        $key = $_ENV['WHISP_USER_PUBLIC_KEY'];
+        $key = $_ENV['WHISP_USER_PUBLIC_KEY'] ?? 'local';
 
         throw_unless(is_string($key), new RuntimeException('WHISP_USER_PUBLIC_KEY environment variable must be a string'));
 
