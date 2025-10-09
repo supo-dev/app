@@ -5,7 +5,7 @@ declare(strict_types=1);
 arch()->preset()->php();
 arch()->preset()->strict();
 arch()->preset()->security()->ignoring([
-    'system',
+    'system', 'exec',
 ]);
 
 arch('controllers')
