@@ -72,11 +72,7 @@ final class FeedCommand extends Command
                     $this->selectedIndex = max(-3, $this->selectedIndex - 1);
                 }
             } elseif ($key === "\e[B" || $key === 'j') {
-                if ($this->selectedIndex < 0) {
-                    $this->selectedIndex = 0;
-                } else {
-                    $this->selectedIndex = min($posts->count() - 1, $this->selectedIndex + 1);
-                }
+                $this->selectedIndex = $this->selectedIndex < 0 ? 0 : min($posts->count() - 1, $this->selectedIndex + 1);
             } elseif (($key === "\e[D" || $key === 'h') && $this->selectedIndex < 0) {
                 $this->selectedIndex = min(-1, $this->selectedIndex + 1);
             } elseif ($key === "\e[C" && $this->selectedIndex < 0) {
