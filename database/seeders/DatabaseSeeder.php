@@ -27,7 +27,7 @@ final class DatabaseSeeder extends Seeder
 
             $followersCount = random_int(0, 5);
             if ($followersCount > 0) {
-                $followers = $users->except($user->id)->random(min($followersCount, $users->count() - 1));
+                $followers = $users->except([$user->id])->random(min($followersCount, $users->count() - 1));
                 $user->followers()->attach($followers->pluck('id'));
             }
         });

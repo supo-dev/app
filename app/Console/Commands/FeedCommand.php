@@ -53,7 +53,7 @@ final class FeedCommand extends Command
 
         $posts = $feeds[$this->activeFeed]();
 
-        if (env('SUPO_NON_INTERACTIVE', false)) {
+        if (config()->boolean('app.non_interactive')) {
             $this->renderFeed($user, $posts, $postsPerPage);
 
             return;
@@ -78,7 +78,7 @@ final class FeedCommand extends Command
             } elseif ($key === "\e[C" && $this->selectedIndex < 0) {
                 $this->selectedIndex = max(-3, $this->selectedIndex - 1);
             } elseif ($key === 'l' && $this->selectedIndex >= 0) {
-                $post = $posts[$this->selectedIndex];
+                $post = $posts->all()[$this->selectedIndex];
                 $likedByCurrentUser = $post->likes->contains('user_id', $user->id);
 
                 if ($likedByCurrentUser) {
@@ -96,7 +96,7 @@ final class FeedCommand extends Command
                     $posts = $feeds[$this->activeFeed]();
                     $this->scrollOffset = 0;
                 } else {
-                    $post = $posts[$this->selectedIndex];
+                    $post = $posts->all()[$this->selectedIndex];
                     $likedByCurrentUser = $post->likes->contains('user_id', $user->id);
 
                     if ($likedByCurrentUser) {
@@ -149,7 +149,7 @@ final class FeedCommand extends Command
     private function captureKeyPress(): string
     {
         system('stty cbreak -echo');
-        $key = fread(STDIN, 4);
+        $key = (string) fread(STDIN, 4);
         system('stty -cbreak echo');
 
         return $key;

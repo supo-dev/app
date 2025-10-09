@@ -29,6 +29,7 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
+    'non_interactive' => (bool) env('SUPO_NON_INTERACTIVE', true),
 
     /*
     |--------------------------------------------------------------------------
