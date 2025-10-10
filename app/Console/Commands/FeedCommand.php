@@ -53,7 +53,7 @@ final class FeedCommand extends Command
 
         $posts = $feeds[$this->activeFeed]();
 
-        if (config()->boolean('app.non_interactive')) {
+        if (env('SUPO_NON_INTERACTIVE', false)) { // @phpstan-ignore-line
             $this->renderFeed($user, $posts, $postsPerPage);
 
             return;
