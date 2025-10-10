@@ -18,6 +18,7 @@ use Illuminate\Notifications\Notifiable;
  * @property-read int $id
  * @property-read string $username
  * @property-read string $password
+ * @property-read string|null $bio
  * @property-read string|null $remember_token
  * @property-read CarbonInterface $created_at
  * @property-read CarbonInterface $updated_at
@@ -56,6 +57,7 @@ final class User extends Authenticatable
             'id' => 'integer',
             'username' => 'string',
             'password' => 'hashed',
+            'bio' => 'string',
             'remember_token' => 'string',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',

@@ -10,12 +10,17 @@ final readonly class UpdateUser
 {
     public function handle(
         User $user,
-        ?string $username = null
+        ?string $username = null,
+        ?string $bio = null
     ): User {
         $data = [];
 
         if ($username !== null) {
             $data['username'] = $username;
+        }
+
+        if ($bio !== null) {
+            $data['bio'] = $bio;
         }
 
         $user->update($data);

@@ -11,11 +11,13 @@ final readonly class CreateUser
 {
     public function handle(
         string $username,
-        #[SensitiveParameter] string $password
+        #[SensitiveParameter] string $password,
+        ?string $bio = null
     ): User {
         return User::query()->create([
             'username' => $username,
             'password' => $password,
+            'bio' => $bio,
         ]);
     }
 }

@@ -29,6 +29,7 @@ final class UserFactory extends Factory
         return [
             'username' => fake()->unique()->userName(),
             'password' => self::$password ??= Hash::make('password'),
+            'bio' => fake()->optional()->sentence(),
             'remember_token' => Str::random(10),
         ];
     }

@@ -29,8 +29,7 @@
     {{-- Profile Info --}}
     <div class="w-full mt-1">
         <div class="flex space-x-2">
-            <span class="text-white font-bold">{{ $user->name }}</span>
-            <span class="text-gray">{{ '@' . $user->username }}</span>
+            <span class="text-white font-bold">{{ '@' . $user->username }}</span>
         </div>
         @if($user->bio)
             <div class="text-white">{{ $user->bio }}</div>
