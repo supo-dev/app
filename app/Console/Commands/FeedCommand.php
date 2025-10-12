@@ -15,6 +15,7 @@ use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Database\Eloquent\Collection;
 use Laravel\Prompts\Key;
 
+use function Laravel\Prompts\clear;
 use function Laravel\Prompts\outro;
 use function Termwind\render;
 
@@ -61,7 +62,7 @@ final class FeedCommand extends Command
         }
 
         while (true) {
-            system('clear');
+            clear();
             echo "\n";
 
             $this->renderFeed($user, $posts, $postsPerPage);
@@ -113,7 +114,7 @@ final class FeedCommand extends Command
 
                 return;
             } elseif ($key === 'e' && $this->activeFeed === 'profile') {
-                system('clear');
+                clear();
                 $this->call(EditProfileCommand::class);
                 $posts = $feeds[$this->activeFeed]();
             }
