@@ -99,9 +99,9 @@
     {{-- Footer --}}
     <div class="flex justify-between text-gray">
         @if($currentPosition !== null)
-            <span>{{ $currentPosition }}/{{ $totalPosts }} • ↑↓ navigate • l like • enter select • q quit</span>
+            <span>{{ $currentPosition }}/{{ $totalPosts }} • ↑↓ navigate • l like • e edit profile • q quit</span>
         @else
-            <span>header navigation • ↑↓←→ navigate • enter select • q quit</span>
+            <span>header navigation • ↑↓←→ navigate • enter select • e edit profile • q quit</span>
         @endif
         <span>powered by supo ◉</span>
     </div>

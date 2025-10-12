@@ -111,6 +111,10 @@ final class FeedCommand extends Command
                 outro('See you later!');
 
                 return;
+            } elseif ($key === 'e' && $this->activeFeed === 'profile') {
+                system('clear');
+                $this->call(EditProfileCommand::class);
+                $posts = $feeds[$this->activeFeed]();
             }
         }
     }

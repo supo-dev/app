@@ -27,3 +27,28 @@ it('does not update when no data provided', function (): void {
 
     expect($updatedUser->username)->toBe('original');
 });
+
+it('may update bio', function (): void {
+    $user = User::factory()->create([
+        'username' => 'username',
+        'bio' => 'Original bio',
+    ]);
+    $action = app(UpdateUser::class);
+
+    $updatedUser = $action->handle($user, bio: 'New bio text');
+
+    expect($updatedUser->bio)->toBe('New bio text');
+});
+
+it('may update username and bio together', function (): void {
+    $user = User::factory()->create([
+        'username' => 'olduser',
+        'bio' => 'Old bio',
+    ]);
+    $action = app(UpdateUser::class);
+
+    $updatedUser = $action->handle($user, 'newuser', 'New bio');
+
+    expect($updatedUser->username)->toBe('newuser')
+        ->and($updatedUser->bio)->toBe('New bio');
+});
