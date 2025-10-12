@@ -13,6 +13,7 @@ use App\Queries\UserPostsQuery;
 use Illuminate\Console\Command;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Database\Eloquent\Collection;
+use Laravel\Prompts\Key;
 
 use function Laravel\Prompts\outro;
 use function Termwind\render;
@@ -67,15 +68,15 @@ final class FeedCommand extends Command
 
             $key = $this->captureKeyPress();
 
-            if ($key === "\e[A" || $key === 'k') {
+            if ($key === Key::UP || $key === 'k') {
                 if ($this->selectedIndex >= 0) {
                     $this->selectedIndex = max(-3, $this->selectedIndex - 1);
                 }
-            } elseif ($key === "\e[B" || $key === 'j') {
+            } elseif ($key === Key::DOWN || $key === 'j') {
                 $this->selectedIndex = $this->selectedIndex < 0 ? 0 : min($posts->count() - 1, $this->selectedIndex + 1);
-            } elseif (($key === "\e[D" || $key === 'h') && $this->selectedIndex < 0) {
+            } elseif (($key === Key::LEFT || $key === 'h') && $this->selectedIndex < 0) {
                 $this->selectedIndex = min(-1, $this->selectedIndex + 1);
-            } elseif ($key === "\e[C" && $this->selectedIndex < 0) {
+            } elseif ($key === Key::RIGHT && $this->selectedIndex < 0) {
                 $this->selectedIndex = max(-3, $this->selectedIndex - 1);
             } elseif ($key === 'l' && $this->selectedIndex >= 0) {
                 $post = $posts->all()[$this->selectedIndex];
@@ -88,7 +89,7 @@ final class FeedCommand extends Command
                 }
 
                 $posts = $feeds[$this->activeFeed]();
-            } elseif ($key === "\n" || $key === "\r") {
+            } elseif ($key === Key::ENTER || $key === "\r") {
                 if ($this->selectedIndex < 0) {
                     $headerIndex = abs($this->selectedIndex) - 1;
                     $feedKeys = ['following', 'trending', 'profile'];
