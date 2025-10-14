@@ -15,7 +15,6 @@ use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Database\Eloquent\Collection;
 use Laravel\Prompts\Key;
 
-use function Laravel\Prompts\clear;
 use function Laravel\Prompts\outro;
 use function Termwind\render;
 
@@ -62,9 +61,8 @@ final class FeedCommand extends Command
         }
 
         while (true) {
-            // Clear screen more aggressively
             system('clear');
-            
+
             $this->renderFeed($user, $posts, $postsPerPage);
 
             $key = $this->captureKeyPress();
