@@ -1,11 +1,16 @@
-@props(['posts'])
+@props(['posts', 'user', 'selectedIndex' => null])
 
 <div class="w-full">
     @forelse ($posts as $index => $post)
-        <x-post :post="$post" :index="$index + 1" />
+        <x-post 
+            :post="$post" 
+            :user="$user" 
+            :isSelected="$selectedIndex !== null && $index === $selectedIndex" 
+        />
     @empty
-        <div class="text-center text-gray-600">
-            <p>No posts yet. Press 'p' to create one!</p>
-        </div>
+        <x-empty-state 
+            title="No posts yet" 
+            message="Press 'p' to create one!" 
+        />
     @endforelse
 </div>
