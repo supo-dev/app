@@ -139,13 +139,16 @@ final class FeedCommand extends Command
 
         $viewName = $this->activeFeed === 'profile' ? 'profile.index' : 'feed.index';
 
+        $feedKeys = ['following', 'trending', 'profile'];
+        $activeFeedIndex = array_search($this->activeFeed, $feedKeys);
+        
         render(view($viewName, [
             'user' => $user,
             'posts' => $visiblePosts,
             'selectedIndex' => $postSelectedIndex !== null ? $postSelectedIndex - $this->scrollOffset : null,
             'totalPosts' => $posts->count(),
             'currentPosition' => $postSelectedIndex !== null ? $postSelectedIndex + 1 : null,
-            'headerSelectedIndex' => $isHeaderSelected ? abs($this->selectedIndex) - 1 : null,
+            'headerSelectedIndex' => $isHeaderSelected ? abs($this->selectedIndex) - 1 : $activeFeedIndex,
             'scrollOffset' => $this->scrollOffset,
         ])->render());
     }
