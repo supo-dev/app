@@ -62,9 +62,9 @@ final class FeedCommand extends Command
         }
 
         while (true) {
-            clear();
-            echo "\n";
-
+            // Clear screen more aggressively
+            system('clear');
+            
             $this->renderFeed($user, $posts, $postsPerPage);
 
             $key = $this->captureKeyPress();
@@ -114,7 +114,7 @@ final class FeedCommand extends Command
 
                 return;
             } elseif ($key === 'e' && $this->activeFeed === 'profile') {
-                clear();
+                system('clear');
                 $this->call(EditProfileCommand::class);
                 $posts = $feeds[$this->activeFeed]();
             }
