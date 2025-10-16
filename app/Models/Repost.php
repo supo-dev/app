@@ -4,27 +4,24 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Database\Factories\PostFactory;
-use Illuminate\Database\Eloquent\Collection;
+use Database\Factories\RepostFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
  * @property-read int $id
- * @property-read int $user_id
- * @property-read string $content
+ * @property int $user_id
+ * @property int $post_id
  * @property-read Carbon $created_at
  * @property-read Carbon $updated_at
  * @property-read User $user
- * @property-read Collection<int, Like> $likes
- * @property-read Collection<int, Repost> $reposts
+ * @property-read Post $post
  */
-final class Post extends Model
+final class Repost extends Model
 {
-    /** @use HasFactory<PostFactory> */
+    /** @use HasFactory<RepostFactory> */
     use HasFactory;
 
     /**
@@ -35,7 +32,7 @@ final class Post extends Model
         return [
             'id' => 'integer',
             'user_id' => 'integer',
-            'content' => 'string',
+            'post_id' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -50,18 +47,10 @@ final class Post extends Model
     }
 
     /**
-     * @return HasMany<Like, $this>
+     * @return BelongsTo<Post, $this>
      */
-    public function likes(): HasMany
+    public function post(): BelongsTo
     {
-        return $this->hasMany(Like::class);
-    }
-
-    /**
-     * @return HasMany<Repost, $this>
-     */
-    public function reposts(): HasMany
-    {
-        return $this->hasMany(Repost::class);
+        return $this->belongsTo(Post::class);
     }
 }

@@ -34,3 +34,18 @@ test('relation likes', function () {
         ->toHaveCount(3)
         ->each->toBeInstanceOf(Like::class);
 });
+
+test('relation reposts', function () {
+    $post = Post::factory()->create();
+    $users = User::factory()->count(2)->create();
+
+    foreach ($users as $user) {
+        $post->reposts()->create(['user_id' => $user->id]);
+    }
+
+    $post = $post->fresh();
+
+    expect($post->reposts)
+        ->toHaveCount(2)
+        ->each->toBeInstanceOf(App\Models\Repost::class);
+});

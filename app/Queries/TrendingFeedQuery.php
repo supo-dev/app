@@ -15,9 +15,10 @@ final readonly class TrendingFeedQuery
     public function builder(): Builder
     {
         return Post::query()
-            ->with(['user', 'likes'])
-            ->withCount('likes')
+            ->with(['user', 'likes', 'reposts'])
+            ->withCount(['likes', 'reposts'])
             ->orderByDesc('likes_count')
+            ->orderByDesc('reposts_count')
             ->orderByDesc('created_at');
     }
 }

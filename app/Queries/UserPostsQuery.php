@@ -22,7 +22,7 @@ final readonly class UserPostsQuery
     {
         return Post::query()
             ->where('user_id', $this->user->id)
-            ->with(['user', 'likes'])
+            ->with(['user', 'likes', 'reposts'])
             ->latest('created_at');
     }
 }

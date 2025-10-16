@@ -1,4 +1,4 @@
-@props(['user', 'posts', 'selectedIndex', 'totalPosts', 'currentPosition', 'headerSelectedIndex', 'scrollOffset'])
+@props(['user', 'posts', 'selectedIndex', 'totalPosts', 'currentPosition', 'headerSelectedIndex', 'selectedAction' => 'like', 'scrollOffset'])
 
 <div class="w-full">
     {{-- Header --}}
@@ -8,11 +8,13 @@
     <x-profile-info :user="$user" />
 
     {{-- Feed --}}
-    @forelse ($posts as $index => $post)
+    @forelse ($posts as $index => $enrichedPost)
         <x-post 
-            :post="$post" 
+            :post="$enrichedPost['post']" 
             :user="$user" 
             :isSelected="$index === $selectedIndex" 
+            :selectedAction="$selectedAction"
+            :repostedBy="$enrichedPost['reposted_by']"
         />
     @empty
         <x-empty-state />
