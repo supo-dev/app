@@ -68,55 +68,104 @@ final class FeedCommand extends Command
             $key = $this->captureKeyPress();
 
             if ($key === Key::UP || $key === 'k') {
-                if ($this->selectedIndex >= 0) {
-                    $this->selectedIndex = max(-3, $this->selectedIndex - 1);
-                }
+                $this->handleNavigateUp();
             } elseif ($key === Key::DOWN || $key === 'j') {
-                $this->selectedIndex = $this->selectedIndex < 0 ? 0 : min($posts->count() - 1, $this->selectedIndex + 1);
+                $this->handleNavigateDown($posts);
             } elseif (($key === Key::LEFT || $key === 'h') && $this->selectedIndex < 0) {
-                $this->selectedIndex = min(-1, $this->selectedIndex + 1);
+                $this->handleNavigateLeft();
             } elseif ($key === Key::RIGHT && $this->selectedIndex < 0) {
-                $this->selectedIndex = max(-3, $this->selectedIndex - 1);
+                $this->handleNavigateRight();
             } elseif ($key === 'l' && $this->selectedIndex >= 0) {
-                $post = $posts->all()[$this->selectedIndex];
-                $likedByCurrentUser = $post->likes->contains('user_id', $user->id);
-
-                if ($likedByCurrentUser) {
-                    $unlikeAction->handle($post, $user);
-                } else {
-                    $likeAction->handle($post, $user);
-                }
-
-                $posts = $feeds[$this->activeFeed]();
+                $posts = $this->handleToggleLike($posts, $user, $likeAction, $unlikeAction, $feeds);
             } elseif ($key === Key::ENTER || $key === "\r") {
-                if ($this->selectedIndex < 0) {
-                    $headerIndex = abs($this->selectedIndex) - 1;
-                    $feedKeys = ['following', 'trending', 'profile'];
-                    $this->activeFeed = $feedKeys[$headerIndex];
-                    $posts = $feeds[$this->activeFeed]();
-                    $this->scrollOffset = 0;
-                } else {
-                    $post = $posts->all()[$this->selectedIndex];
-                    $likedByCurrentUser = $post->likes->contains('user_id', $user->id);
-
-                    if ($likedByCurrentUser) {
-                        $unlikeAction->handle($post, $user);
-                    } else {
-                        $likeAction->handle($post, $user);
-                    }
-
-                    $posts = $feeds[$this->activeFeed]();
-                }
+                $posts = $this->handleEnterKey($posts, $user, $likeAction, $unlikeAction, $feeds);
             } elseif ($key === 'q') {
-                outro('See you later!');
-
+                $this->handleQuit();
                 return;
             } elseif ($key === 'e' && $this->activeFeed === 'profile') {
-                system('clear');
-                $this->call(EditProfileCommand::class);
-                $posts = $feeds[$this->activeFeed]();
+                $posts = $this->handleEditProfile($feeds);
             }
         }
+    }
+
+    private function handleNavigateUp(): void
+    {
+        if ($this->selectedIndex >= 0) {
+            $this->selectedIndex = max(-3, $this->selectedIndex - 1);
+        }
+    }
+
+    private function handleNavigateDown(Collection $posts): void
+    {
+        $this->selectedIndex = $this->selectedIndex < 0 ? 0 : min($posts->count() - 1, $this->selectedIndex + 1);
+    }
+
+    private function handleNavigateLeft(): void
+    {
+        $this->selectedIndex = min(-1, $this->selectedIndex + 1);
+    }
+
+    private function handleNavigateRight(): void
+    {
+        $this->selectedIndex = max(-3, $this->selectedIndex - 1);
+    }
+
+    private function handleToggleLike(
+        Collection $posts,
+        User $user,
+        LikeAction $likeAction,
+        UnlikeAction $unlikeAction,
+        array $feeds
+    ): Collection {
+        $post = $posts->all()[$this->selectedIndex];
+        $likedByCurrentUser = $post->likes->contains('user_id', $user->id);
+
+        if ($likedByCurrentUser) {
+            $unlikeAction->handle($post, $user);
+        } else {
+            $likeAction->handle($post, $user);
+        }
+
+        return $feeds[$this->activeFeed]();
+    }
+
+    private function handleEnterKey(
+        Collection $posts,
+        User $user,
+        LikeAction $likeAction,
+        UnlikeAction $unlikeAction,
+        array $feeds
+    ): Collection {
+        if ($this->selectedIndex < 0) {
+            $headerIndex = abs($this->selectedIndex) - 1;
+            $feedKeys = ['following', 'trending', 'profile'];
+            $this->activeFeed = $feedKeys[$headerIndex];
+            $this->scrollOffset = 0;
+        } else {
+            $post = $posts->all()[$this->selectedIndex];
+            $likedByCurrentUser = $post->likes->contains('user_id', $user->id);
+
+            if ($likedByCurrentUser) {
+                $unlikeAction->handle($post, $user);
+            } else {
+                $likeAction->handle($post, $user);
+            }
+        }
+
+        return $feeds[$this->activeFeed]();
+    }
+
+    private function handleQuit(): void
+    {
+        outro('See you later!');
+    }
+
+    private function handleEditProfile(array $feeds): Collection
+    {
+        system('clear');
+        $this->call(EditProfileCommand::class);
+
+        return $feeds[$this->activeFeed]();
     }
 
     /**
@@ -141,7 +190,7 @@ final class FeedCommand extends Command
 
         $feedKeys = ['following', 'trending', 'profile'];
         $activeFeedIndex = array_search($this->activeFeed, $feedKeys);
-        
+
         render(view($viewName, [
             'user' => $user,
             'posts' => $visiblePosts,
